@@ -22,19 +22,41 @@ This documentation is in pre-alpha state.
 
 # Authentication
 
+> The code below is an example of this process in Javascript.
+
+```javascript
+        // transform all request to include basic auth.
+        var headers = headersGetter();
+        var tonce = new Date().getTime() * 1000; // any tonce
+        var shaObj = new jsSHA(tonce + publicKey + data, "TEXT");
+        var hmacSignature = shaObj.getHMAC(privateKey, "TEXT", "SHA-512", "B64");
+
+        headers.Authorization = "Basic " + Base64.encode(publicKey + ":" + hmacSignature);
+        headers.Tonce = tonce;
+
+```
+
 > Example of authentication
 
 ```shell
 # With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+curl "apiEndpoing"
+  -H "Authorization: Basic theHash"
+  -H "Tonce: theTonce"
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+> Make sure to replace "theHash" with the result of the HMAC signature, and "theTonce" with the tonce used in the request.
 
-We use long-lived application keys to authenticate requests. Please contact support (mailto://support@btc.sx).
+We use pairs of long-lived application keys to authenticate requests. Please contact <support@btc.sx> to request an API key .
 
-Every request should be signed with the following format... TODO
+Every request should include the following header values
+
+Header | Required | Description
+--------- | ------- | -----------
+Tonce | yes | Continuously increasing numeric value.
+Authorization | yes | The string "Basic ", appended with the signature resulting of calculating the HMAC SHA-512 value of the tonce, the public key that you were assigned, and the body of the request.
+
+
 
 <aside class="notice">
 Notice...
@@ -46,20 +68,8 @@ Notice...
 
 ```shell
 curl "https://btc.sx/v1/api/trades"
-  -H "Authorization: meowmeowmeow"
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1
-  },
-  {
-    "id": 2
-  }
-]
+  -H "Authorization: Basic theHash"
+  -H "Tonce: theTonce"
 ```
 
 Returns 200 OK when the trade is correctly placed. Otherwise, please see error list.
@@ -84,7 +94,8 @@ Has to be authenticated
 
 ```shell
 curl "https://btc.sx/v1/api/trade"
-  -H "Authorization: meowmeowmeow"
+  -H "Authorization: Basic theHash"
+  -H "Tonce: theTonce"
 ```
 
 > The above command returns JSON structured like this:
