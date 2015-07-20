@@ -53,7 +53,7 @@ Every request should include the following header values
 
 Header | Required | Description
 --------- | ------- | -----------
-Tonce | yes | Continuously increasing numeric value.
+Tonce | yes | It should be a non-repeating number, and be around a 5 minutes window around the current timestamp.
 Authorization | yes | The string "Basic ", appended with the signature resulting of calculating the HMAC SHA-512 value of the tonce, the public key that you were assigned, and the body of the request.
 
 
