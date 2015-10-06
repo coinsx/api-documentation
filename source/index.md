@@ -22,31 +22,44 @@ Welcome to the magnr.com Trading API.
 
 This documentation is in pre-alpha state.
 
+## Error Handling
+
+All errors follow general REST principles. Included in the body of any error response (e.g. non-2xx status code) will be an error object of the form:
+
+Parameter | Value
+---------- | -------
+errors | List of error strings
+
 # Authentication
 
-> The code below is an example of this process in Javascript.
-
-```javascript
-        // transform all request to include basic auth.
-        var tonce = new Date().getTime() * 1000; // any tonce
-        var shaObj = new jsSHA(tonce + publicKey + data, "TEXT");
-        var hmacSignature = shaObj.getHMAC(privateKey, "TEXT", "SHA-512", "B64");
-
-        headers.Authorization = "Basic " + Base64.encode(publicKey + ":" + hmacSignature);
-        headers.Tonce = tonce;
-
-```
 
 > Example of authentication
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "/api/v1/<some end point>/"
-  -H "Authorization: Basic <base64(pubkey:HMAC)>"
-  -H "Tonce: <a tonce>"
+```javascript
+    // transform all request to include basic auth.
+    var tonce = new Date().getTime() * 1000; // any tonce
+    var shaObj = new jsSHA(tonce + publicKey + data, "TEXT");
+    var hmacSignature = shaObj.getHMAC(privateKey, "TEXT", "SHA-512", "B64");
+
+    headers.Authorization = "Basic " + Base64.encode(publicKey + ":" + hmacSignature);
+    headers.Tonce = tonce;
 ```
 
-> Make sure to replace "<base64(pubkey:HMAC)>" with the result of the HMAC signature, and "<a tonce>" with the tonce used in the request.
+```shell
+# With shell, you can pass a signed header with each request
+TONCE=`date +%s`
+PRIVKEY="your private key here"
+PUBKEY="your public key here"
+DATA="some json or empty string"
+SIG=`echo -n "$TONCE$PUBKEY$DATA" | openssl dgst -sha512 -hmac "$PRIVKEY" -binary | base64`
+AUTH=`echo -n "$PUBKEY:$SIG" | base64`
+curl "/api/v1/<some end point>/"
+  -H "Authorization: Basic $AUTH"
+  -H "Tonce: $TONCE"
+  ...
+```
+
+> Make sure to replace "$AUTH" with the result of the HMAC signature, and "$TONCE" with the tonce used in the request.
 
 We use pairs of long-lived application keys to authenticate requests. Please contact <support@magnr.com> to request an API key .
 
@@ -110,15 +123,15 @@ Has to be authenticated
 
 Parameter | Type | Description
 --------- | ---- | ----------------
-id | string | identifier to look up trade thereafter
+id | string | Trade identifier
 
 ### ERRORS
 
 Response | Description
 -------- | -----------
-400 Bad Request | The request parameters were missing or incorrect, check the response object
-409 Conflict | The request could be completed due to a state conflict with the account, check the response object
-500 Internal Server Error | The system encountered an error, or the exchange failed to accept the trade, check the response object 
+400 Bad Request | The request parameters were missing or incorrect
+409 Conflict | The request could be completed due to a state conflict with the account
+500 Internal Server Error | The system encountered an error, or the exchange failed to accept the trade 
 
 ## Get trade
 
