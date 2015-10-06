@@ -13,7 +13,7 @@
 
       <script>
         $(function() {
-          setupLanguages(["shell"]);
+          setupLanguages(["javascript","shell","php"]);
         });
       </script>
   </head>
@@ -28,7 +28,9 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
         <div class="lang-selector">
+              <a href="#" data-language-name="javascript">javascript</a>
               <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="php">php</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -46,7 +48,7 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the BTC.sx API.</p>
+<p>Welcome to the magnr.com Trading API.</p>
 
 <p>This documentation is in pre-alpha state.</p>
 
@@ -56,7 +58,6 @@
 <p>The code below is an example of this process in Javascript.</p>
 </blockquote>
 <pre class="highlight javascript"><code>        <span class="c1">// transform all request to include basic auth.</span>
-        <span class="kd">var</span> <span class="nx">headers</span> <span class="o">=</span> <span class="nx">headersGetter</span><span class="p">();</span>
         <span class="kd">var</span> <span class="nx">tonce</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// any tonce</span>
         <span class="kd">var</span> <span class="nx">shaObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">jsSHA</span><span class="p">(</span><span class="nx">tonce</span> <span class="o">+</span> <span class="nx">publicKey</span> <span class="o">+</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">hmacSignature</span> <span class="o">=</span> <span class="nx">shaObj</span><span class="p">.</span><span class="nx">getHMAC</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">,</span> <span class="s2">"SHA-512"</span><span class="p">,</span> <span class="s2">"B64"</span><span class="p">);</span>
@@ -70,16 +71,16 @@
 <p>Example of authentication</p>
 </blockquote>
 <pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"apiEndpoing"</span>
-  -H <span class="s2">"Authorization: Basic theHash"</span>
-  -H <span class="s2">"Tonce: theTonce"</span>
+curl <span class="s2">"/api/v1/&lt;some end point&gt;/"</span>
+  -H <span class="s2">"Authorization: Basic &lt;base64(pubkey:HMAC)&gt;"</span>
+  -H <span class="s2">"Tonce: &lt;a tonce&gt;"</span>
 </code></pre>
 
 <blockquote>
-<p>Make sure to replace &ldquo;theHash&rdquo; with the result of the HMAC signature, and &ldquo;theTonce&rdquo; with the tonce used in the request.</p>
+<p>Make sure to replace &ldquo;<base64(pubkey:HMAC)>&rdquo; with the result of the HMAC signature, and &ldquo;<a tonce>&rdquo; with the tonce used in the request.</p>
 </blockquote>
 
-<p>We use pairs of long-lived application keys to authenticate requests. Please contact <a href="mailto:support@btc.sx">support@btc.sx</a> to request an API key .</p>
+<p>We use pairs of long-lived application keys to authenticate requests. Please contact <a href="mailto:support@magnr.com">support@magnr.com</a> to request an API key .</p>
 
 <p>Every request should include the following header values</p>
 
@@ -110,43 +111,92 @@ Notice&hellip;
 
 <h2 id="place-trade">Place trade</h2>
 <pre class="highlight shell"><code>curl <span class="s2">"https://btc.sx/v1/api/trades"</span>
-  -H <span class="s2">"Authorization: Basic theHash"</span>
-  -H <span class="s2">"Tonce: theTonce"</span>
+  -X POST
+  -H <span class="s2">"Authorization: Basic &lt;AUTH&gt;"</span>
+  -H <span class="s2">"Tonce: &lt;tonce&gt;"</span>
+  -d <span class="s1">'{"leverage":10, "side":"BUY", "exchange":"Bitfinex", "pair":"BTCUSD", "margin":5, "size":0.2, "take":10}'</span>
 </code></pre>
 
-<p>Returns 200 OK when the trade is correctly placed. Otherwise, please see error list.</p>
+<p>Returns 201 CREATED when the trade is correctly placed. Otherwise, please see error list.</p>
+
+<blockquote>
+<p>Response</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;some identifier&gt;"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">POST https://btc.sx/v1/api/trade</code></p>
+<p><code class="prettyprint">POST https://magnr.com/api/v1/trades/</code></p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="body-parameters">BODY Parameters</h3>
 
 <table><thead>
 <tr>
 <th>Parameter</th>
+<th>Type</th>
 <th>Required</th>
 <th>Default</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>exchange</td>
-<td>yes</td>
+<td>leverage</td>
+<td>number</td>
+<td>YES</td>
 <td>none</td>
-<td>Exchange to be used for the trade</td>
+<td>10,5,2 (Leverage to apply on this trade)</td>
 </tr>
 <tr>
-<td>positionSize</td>
-<td>yes</td>
+<td>side</td>
+<td>string</td>
+<td>YES</td>
+<td>none</td>
+<td>buy or sell (case sensitive)</td>
+</tr>
+<tr>
+<td>exchange</td>
+<td>string</td>
+<td>YES</td>
+<td>none</td>
+<td>Bitstamp,ItBit,Bitfinex (Exchange to be used for the trade)</td>
+</tr>
+<tr>
+<td>pair</td>
+<td>string</td>
+<td>YES</td>
+<td>none</td>
+<td>BTCUSD, XBTUSD (exchange dependent)</td>
+</tr>
+<tr>
+<td>margin</td>
+<td>float</td>
+<td>YES</td>
+<td>none</td>
+<td>An amount in $USD the price can move against you before being automatically closed out.</td>
+</tr>
+<tr>
+<td>size</td>
+<td>float</td>
+<td>YES</td>
 <td>none</td>
 <td>Size of the position to market.</td>
 </tr>
 <tr>
-<td>leverage</td>
-<td>no</td>
-<td>5</td>
-<td>Leverage of the position (valid values are 2, 5 or 10).</td>
+<td>type</td>
+<td>string</td>
+<td>NO</td>
+<td>market</td>
+<td>market is the only option at present</td>
+</tr>
+<tr>
+<td>take</td>
+<td>float</td>
+<td>NO</td>
+<td>none</td>
+<td>The amount in $USD you wish the price to move in your favour before closing out.</td>
 </tr>
 </tbody></table>
 
@@ -154,10 +204,48 @@ Notice&hellip;
 Has to be authenticated
 </aside>
 
+<h3 id="response">RESPONSE</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>identifier to look up trade thereafter</td>
+</tr>
+</tbody></table>
+
+<h3 id="errors">ERRORS</h3>
+
+<table><thead>
+<tr>
+<th>Response</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400 Bad Request</td>
+<td>The request parameters were missing or incorrect, check the response object</td>
+</tr>
+<tr>
+<td>409 Conflict</td>
+<td>The request could be completed due to a state conflict with the account, check the response object</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>The system encountered an error, or the exchange failed to accept the trade, check the response object</td>
+</tr>
+</tbody></table>
+
 <h2 id="get-trade">Get trade</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://btc.sx/v1/api/trade"</span>
-  -H <span class="s2">"Authorization: Basic theHash"</span>
-  -H <span class="s2">"Tonce: theTonce"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/"</span>
+  -H <span class="s2">"Authorization: Basic &lt;AUTH&gt;"</span>
+  -H <span class="s2">"Tonce: &lt;tonce&gt;"</span>
 </code></pre>
 
 <blockquote>
@@ -172,7 +260,7 @@ Has to be authenticated
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET https://btc.sx/v1/api/trade&lt;ID&gt;</code></p>
+<p><code class="prettyprint">GET https://magnr.com/api/v1/trades/&lt;ID&gt;</code></p>
 
 <h3 id="url-parameters">URL Parameters</h3>
 
@@ -211,7 +299,9 @@ Has to be authenticated
       </div>
       <div class="dark-box">
           <div class="lang-selector">
+                <a href="#" data-language-name="javascript">javascript</a>
                 <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="php">php</a>
           </div>
       </div>
     </div>
