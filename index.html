@@ -52,32 +52,50 @@
 
 <p>This documentation is in pre-alpha state.</p>
 
+<h2 id="error-handling">Error Handling</h2>
+
+<p>All errors follow general REST principles. Included in the body of any error response (e.g. non-2xx status code) will be an error object of the form:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>errors</td>
+<td>List of error strings</td>
+</tr>
+</tbody></table>
+
 <h1 id="authentication">Authentication</h1>
-
-<blockquote>
-<p>The code below is an example of this process in Javascript.</p>
-</blockquote>
-<pre class="highlight javascript"><code>        <span class="c1">// transform all request to include basic auth.</span>
-        <span class="kd">var</span> <span class="nx">tonce</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// any tonce</span>
-        <span class="kd">var</span> <span class="nx">shaObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">jsSHA</span><span class="p">(</span><span class="nx">tonce</span> <span class="o">+</span> <span class="nx">publicKey</span> <span class="o">+</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">);</span>
-        <span class="kd">var</span> <span class="nx">hmacSignature</span> <span class="o">=</span> <span class="nx">shaObj</span><span class="p">.</span><span class="nx">getHMAC</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">,</span> <span class="s2">"SHA-512"</span><span class="p">,</span> <span class="s2">"B64"</span><span class="p">);</span>
-
-        <span class="nx">headers</span><span class="p">.</span><span class="nx">Authorization</span> <span class="o">=</span> <span class="s2">"Basic "</span> <span class="o">+</span> <span class="nx">Base64</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">publicKey</span> <span class="o">+</span> <span class="s2">":"</span> <span class="o">+</span> <span class="nx">hmacSignature</span><span class="p">);</span>
-        <span class="nx">headers</span><span class="p">.</span><span class="nx">Tonce</span> <span class="o">=</span> <span class="nx">tonce</span><span class="p">;</span>
-
-</code></pre>
 
 <blockquote>
 <p>Example of authentication</p>
 </blockquote>
-<pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
+<pre class="highlight javascript"><code>    <span class="c1">// transform all request to include basic auth.</span>
+    <span class="kd">var</span> <span class="nx">tonce</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// any tonce</span>
+    <span class="kd">var</span> <span class="nx">shaObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">jsSHA</span><span class="p">(</span><span class="nx">tonce</span> <span class="o">+</span> <span class="nx">publicKey</span> <span class="o">+</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">hmacSignature</span> <span class="o">=</span> <span class="nx">shaObj</span><span class="p">.</span><span class="nx">getHMAC</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">,</span> <span class="s2">"SHA-512"</span><span class="p">,</span> <span class="s2">"B64"</span><span class="p">);</span>
+
+    <span class="nx">headers</span><span class="p">.</span><span class="nx">Authorization</span> <span class="o">=</span> <span class="s2">"Basic "</span> <span class="o">+</span> <span class="nx">Base64</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">publicKey</span> <span class="o">+</span> <span class="s2">":"</span> <span class="o">+</span> <span class="nx">hmacSignature</span><span class="p">);</span>
+    <span class="nx">headers</span><span class="p">.</span><span class="nx">Tonce</span> <span class="o">=</span> <span class="nx">tonce</span><span class="p">;</span>
+</code></pre>
+<pre class="highlight shell"><code><span class="c"># With shell, you can pass a signed header with each request</span>
+<span class="nv">TONCE</span><span class="o">=</span><span class="sb">`</span>date +%s<span class="sb">`</span>
+<span class="nv">PRIVKEY</span><span class="o">=</span><span class="s2">"your private key here"</span>
+<span class="nv">PUBKEY</span><span class="o">=</span><span class="s2">"your public key here"</span>
+<span class="nv">DATA</span><span class="o">=</span><span class="s2">"some json or empty string"</span>
+<span class="nv">SIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$TONCE$PUBKEY$DATA</span><span class="s2">"</span> | openssl dgst -sha512 -hmac <span class="s2">"</span><span class="nv">$PRIVKEY</span><span class="s2">"</span> -binary | base64<span class="sb">`</span>
+<span class="nv">AUTH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$PUBKEY</span><span class="s2">:</span><span class="nv">$SIG</span><span class="s2">"</span> | base64<span class="sb">`</span>
 curl <span class="s2">"/api/v1/&lt;some end point&gt;/"</span>
-  -H <span class="s2">"Authorization: Basic &lt;base64(pubkey:HMAC)&gt;"</span>
-  -H <span class="s2">"Tonce: &lt;a tonce&gt;"</span>
+  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
+  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
+  ...
 </code></pre>
 
 <blockquote>
-<p>Make sure to replace &ldquo;<base64(pubkey:HMAC)>&rdquo; with the result of the HMAC signature, and &ldquo;<a tonce>&rdquo; with the tonce used in the request.</p>
+<p>Make sure to replace &ldquo;$AUTH&rdquo; with the result of the HMAC signature, and &ldquo;$TONCE&rdquo; with the tonce used in the request.</p>
 </blockquote>
 
 <p>We use pairs of long-lived application keys to authenticate requests. Please contact <a href="mailto:support@magnr.com">support@magnr.com</a> to request an API key .</p>
@@ -216,7 +234,7 @@ Has to be authenticated
 <tr>
 <td>id</td>
 <td>string</td>
-<td>identifier to look up trade thereafter</td>
+<td>Trade identifier</td>
 </tr>
 </tbody></table>
 
@@ -230,15 +248,15 @@ Has to be authenticated
 </thead><tbody>
 <tr>
 <td>400 Bad Request</td>
-<td>The request parameters were missing or incorrect, check the response object</td>
+<td>The request parameters were missing or incorrect</td>
 </tr>
 <tr>
 <td>409 Conflict</td>
-<td>The request could be completed due to a state conflict with the account, check the response object</td>
+<td>The request could be completed due to a state conflict with the account</td>
 </tr>
 <tr>
 <td>500 Internal Server Error</td>
-<td>The system encountered an error, or the exchange failed to accept the trade, check the response object</td>
+<td>The system encountered an error, or the exchange failed to accept the trade</td>
 </tr>
 </tbody></table>
 
@@ -273,26 +291,6 @@ Has to be authenticated
 <tr>
 <td>ID</td>
 <td>The ID of the trade to retrieve</td>
-</tr>
-</tbody></table>
-
-          <h1 id="errors">Errors</h1>
-
-<p>The Trading API uses the following error codes:</p>
-
-<table><thead>
-<tr>
-<th>Error Code</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
 </tr>
 </tbody></table>
 
