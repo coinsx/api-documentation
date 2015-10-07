@@ -81,43 +81,44 @@
 <span class="nx">headers</span><span class="p">.</span><span class="nx">Authorization</span> <span class="o">=</span> <span class="s2">"Basic "</span> <span class="o">+</span> <span class="nx">Base64</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">publicKey</span> <span class="o">+</span> <span class="s2">":"</span> <span class="o">+</span> <span class="nx">hmacSignature</span><span class="p">);</span>
 <span class="nx">headers</span><span class="p">.</span><span class="nx">Tonce</span> <span class="o">=</span> <span class="nx">tonce</span><span class="p">;</span>
 </code></pre>
-<pre class="highlight php"><code>$tonce = intval(microtime(true)*1000);
-$privkey = "your private key";
-$pubkey = "your public key";
-$data = json_encode(["key"=&gt;"value"]);
-$sig = base64_encode(hash_hmac("sha512", $tonce.$pubkey.$data, $privkey, true));
-$auth = base64_encode($pubkey.":".$sig);
+<pre class="highlight php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$tonce</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nb">microtime</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
+<span class="nv">$privkey</span> <span class="o">=</span> <span class="s2">"your private key"</span><span class="p">;</span>
+<span class="nv">$pubkey</span> <span class="o">=</span> <span class="s2">"your public key"</span><span class="p">;</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">([</span><span class="s2">"key"</span><span class="o">=&gt;</span><span class="s2">"value"</span><span class="p">]);</span>
+<span class="nv">$sig</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nb">hash_hmac</span><span class="p">(</span><span class="s2">"sha512"</span><span class="p">,</span> <span class="nv">$tonce</span><span class="o">.</span><span class="nv">$pubkey</span><span class="o">.</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$privkey</span><span class="p">,</span> <span class="kc">true</span><span class="p">));</span>
+<span class="nv">$auth</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nv">$pubkey</span><span class="o">.</span><span class="s2">":"</span><span class="o">.</span><span class="nv">$sig</span><span class="p">);</span>
 
 
-$url = "https://magnr.com/api/v1/<span class="nt">&lt;some</span> <span class="na">end</span> <span class="na">point</span><span class="nt">&gt;</span>/";
-$curl = curl_init();
-curl_setopt($curl, CURLOPT_URL, $url);
-// apply headers
-curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
+<span class="nv">$url</span> <span class="o">=</span> <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span><span class="p">;</span>
+<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
+<span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="nv">$url</span><span class="p">);</span>
+<span class="c1">// apply headers
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
 
-// define how we want our response.
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
-curl_setopt($curl, CURLOPT_HEADER, 0); // don't include headers in the response from curl_exec
+<span class="c1">// define how we want our response.
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// curl_exec returns the result
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// don't include headers in the response from curl_exec
+</span>
+<span class="c1">// optionally, set the POST data if this is a POST request
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_POST</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
 
-// optionally, set the POST data if this is a POST request
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+<span class="c1">// follow redirects just in case
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_FOLLOWLOCATION</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 
-// follow redirects just in case
-curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+<span class="c1">// set timeouts in seconds
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_CONNECTTIMEOUT</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+<span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_TIMEOUT</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
 
-// set timeouts in seconds
-curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
-curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+<span class="c1">// gimme gimme!
+</span><span class="nv">$body</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$curl</span><span class="p">);</span>
+<span class="nv">$status</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="nv">$status</span> <span class="o">&gt;=</span> <span class="mi">200</span> <span class="o">&amp;&amp;</span> <span class="nv">$status</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">){</span>
+    <span class="c1">// ... handle error like stuff if we care
+</span><span class="p">}</span>
 
-// gimme gimme!
-$body = curl_exec($curl);
-$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-if($status &gt;= 200 <span class="err">&amp;&amp;</span> $status <span class="nt">&lt; 300</span><span class="err">){</span>
-    <span class="err">//</span> <span class="err">...</span> <span class="na">handle</span> <span class="na">error</span> <span class="na">like</span> <span class="na">stuff</span> <span class="na">if</span> <span class="na">we</span> <span class="na">care</span>
-<span class="err">}</span>
-
-<span class="na">echo</span> <span class="err">"</span><span class="na">STATUS:</span> <span class="err">$</span><span class="na">status</span><span class="err">\</span><span class="na">nBODY:</span><span class="err">\</span><span class="na">n</span><span class="err">$</span><span class="na">body</span><span class="err">";</span>
+<span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
 </code></pre>
 <pre class="highlight shell"><code><span class="c"># With shell, you can pass a signed header with each request</span>
 <span class="nv">TONCE</span><span class="o">=</span><span class="sb">`</span><span class="k">$(($(</span>date +%s<span class="k">)</span><span class="o">*</span><span class="m">1000</span><span class="k">))</span><span class="sb">`</span>
