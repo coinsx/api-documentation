@@ -85,7 +85,7 @@
 <span class="nv">$tonce</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nb">microtime</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
 <span class="nv">$privkey</span> <span class="o">=</span> <span class="s2">"your private key"</span><span class="p">;</span>
 <span class="nv">$pubkey</span> <span class="o">=</span> <span class="s2">"your public key"</span><span class="p">;</span>
-<span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">([</span><span class="s2">"key"</span><span class="o">=&gt;</span><span class="s2">"value"</span><span class="p">]);</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="s2">"empty string or json string"</span><span class="p">;</span>
 <span class="nv">$sig</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nb">hash_hmac</span><span class="p">(</span><span class="s2">"sha512"</span><span class="p">,</span> <span class="nv">$tonce</span><span class="o">.</span><span class="nv">$pubkey</span><span class="o">.</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$privkey</span><span class="p">,</span> <span class="kc">true</span><span class="p">));</span>
 <span class="nv">$auth</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nv">$pubkey</span><span class="o">.</span><span class="s2">":"</span><span class="o">.</span><span class="nv">$sig</span><span class="p">);</span>
 
@@ -121,21 +121,18 @@
 <span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
 </code></pre>
 <pre class="highlight shell"><code><span class="c"># With shell, you can pass a signed header with each request</span>
-<span class="nv">TONCE</span><span class="o">=</span><span class="sb">`</span><span class="k">$(($(</span>date +%s<span class="k">)</span><span class="o">*</span><span class="m">1000</span><span class="k">))</span><span class="sb">`</span>
+<span class="nv">TONCE</span><span class="o">=</span><span class="k">$(($(</span>date +%s<span class="k">)</span><span class="o">*</span><span class="m">1000</span><span class="k">))</span>
 <span class="nv">PRIVKEY</span><span class="o">=</span><span class="s2">"your private key here"</span>
 <span class="nv">PUBKEY</span><span class="o">=</span><span class="s2">"your public key here"</span>
 <span class="nv">DATA</span><span class="o">=</span><span class="s2">"some json or empty string"</span>
 <span class="nv">SIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$TONCE$PUBKEY$DATA</span><span class="s2">"</span> | openssl dgst -sha512 -hmac <span class="s2">"</span><span class="nv">$PRIVKEY</span><span class="s2">"</span> -binary | base64<span class="sb">`</span>
 <span class="nv">AUTH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$PUBKEY</span><span class="s2">:</span><span class="nv">$SIG</span><span class="s2">"</span> | base64<span class="sb">`</span>
 curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
   -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
   -d <span class="nv">$DATA</span>
 </code></pre>
-
-<blockquote>
-<p>Make sure to replace &ldquo;$AUTH&rdquo; with the result of the HMAC signature, and &ldquo;$TONCE&rdquo; with the tonce used in the request.</p>
-</blockquote>
 
 <p>We use pairs of long-lived application keys to authenticate requests. Please contact <a href="mailto:support@magnr.com">support@magnr.com</a> to request an API key .</p>
 
@@ -167,11 +164,14 @@ Notice&hellip;
 <h1 id="trading">Trading</h1>
 
 <h2 id="place-trade">Place trade</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/v1/api/trades/"</span>
-  -X POST
-  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
-  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
-  -d <span class="s1">'{"leverage":10, "side":"BUY", "exchange":"Bitfinex", "pair":"BTCUSD", "margin":5, "size":0.2, "take":10}'</span>
+<pre class="highlight shell"><code><span class="nv">DATA</span><span class="o">=</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">leverage</span><span class="se">\"</span><span class="s2">:10, </span><span class="se">\"</span><span class="s2">side</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BUY</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">exchange</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bitfinex</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">pair</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BTCUSD</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">margin</span><span class="se">\"</span><span class="s2">:5, </span><span class="se">\"</span><span class="s2">size</span><span class="se">\"</span><span class="s2">:0.2, </span><span class="se">\"</span><span class="s2">take</span><span class="se">\"</span><span class="s2">:10}"</span>
+curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se">\</span>
+  -X POST <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span> <span class="se">\</span>
+  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span> <span class="se">\</span>
+  -d <span class="nv">$DATA</span>
 </code></pre>
 
 <p>Returns 201 CREATED when the trade is correctly placed. Otherwise, please see error list.</p>
