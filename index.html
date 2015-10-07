@@ -172,10 +172,6 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 </code></pre>
 
 <p>Returns 201 CREATED when the trade is correctly placed. See error list for other response codes.</p>
-
-<blockquote>
-<p>Response - 201 CREATED</p>
-</blockquote>
 <pre class="highlight php"><code><span class="cp">&lt;?php</span>
 <span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">([</span><span class="s2">"leverage"</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"side"</span><span class="o">=&gt;</span><span class="s2">"buy"</span><span class="p">,</span> <span class="s2">"exchange"</span><span class="o">=&gt;</span><span class="s2">"Bitfinex"</span><span class="p">,</span> <span class="s2">"pair"</span><span class="o">=&gt;</span><span class="s2">"BTCUSD"</span><span class="p">,</span> <span class="s2">"margin"</span><span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="s2">"size"</span><span class="o">=&gt;</span><span class="mf">0.2</span><span class="p">,</span> <span class="s2">"take"</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">]);</span>
 
@@ -202,6 +198,10 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 <span class="nv">$json</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$body</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span> <span class="c1">// the json as an array
 </span><span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
 </code></pre>
+
+<blockquote>
+<p>Response - 201 CREATED</p>
+</blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;some identifier&gt;"</span><span class="w">
 </span><span class="p">}</span><span class="w">
