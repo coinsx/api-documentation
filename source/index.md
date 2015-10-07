@@ -123,8 +123,6 @@ curl "https://magnr.com/api/v1/trades/" \
 
 Returns 201 CREATED when the trade is correctly placed. See error list for other response codes.
 
-> Response - 201 CREATED
-
 ```php
 <?php
 $data = json_encode(["leverage"=>10, "side"=>"buy", "exchange"=>"Bitfinex", "pair"=>"BTCUSD", "margin"=>5, "size"=>0.2, "take"=>10]);
@@ -153,6 +151,7 @@ $json = json_decode($body,true); // the json as an array
 echo "STATUS: $status\nBODY:\n$body";
 ```
 
+> Response - 201 CREATED
 
 ```json
 {
