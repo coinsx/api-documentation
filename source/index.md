@@ -125,6 +125,35 @@ Returns 201 CREATED when the trade is correctly placed. See error list for other
 
 > Response - 201 CREATED
 
+```php
+
+$data = json_encode(["leverage"=>10, "side"=>"buy", "exchange"=>"Bitfinex", "pair"=>"BTCUSD", "margin"=>5, "size"=>0.2, "take"=>10]);
+
+/**
+ * DO AUTH STUFF HERE TO GENERATE $auth AND $tonce
+ */
+
+$curl = curl_init("https://magnr.com/api/v1/trades/$id/");
+// Set to a POST request
+curl_setopt($curl, CURLOPT_POST, true);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+// apply headers
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce", "Content-Type: application/json", "Accept: application/json"]);
+
+// define how we want our response.
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
+curl_setopt($curl, CURLOPT_HEADER, 0); // don't include headers in the response from curl_exec
+
+// gimme gimme!
+$body = curl_exec($curl);
+$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+$json = json_decode($body,true); // the json as an array
+echo "STATUS: $status\nBODY:\n$body";
+```
+
+
 ```json
 {
   "id":"<some identifier>"
@@ -262,7 +291,7 @@ echo "STATUS: $status\nBODY:\n$body";
 ```json
 {
   "id": 2,
-  "more fields here"...
+  "more fields here":""
 }
 ```
 
