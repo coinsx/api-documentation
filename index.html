@@ -122,7 +122,7 @@ In the SANDBOX environment it is advisable to utilise the &ldquo;LOCAL&rdquo; ex
 <span class="nv">DATA</span><span class="o">=</span><span class="s2">"some json or empty string"</span>
 <span class="nv">SIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -en <span class="s2">"</span><span class="nv">$TONCE$PUBKEY$DATA</span><span class="s2">"</span> | openssl dgst -sha512 -hmac <span class="s2">"</span><span class="nv">$PRIVKEY</span><span class="s2">"</span> -binary | base64<span class="sb">`</span>
 <span class="nv">AUTH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -en <span class="s2">"</span><span class="nv">$PUBKEY</span><span class="s2">:</span><span class="nv">$SIG</span><span class="s2">"</span> | base64<span class="sb">`</span>
-curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
+curl <span class="s2">"https://sandbox.magnr.com/api/v1/&lt;some end point&gt;/"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
   -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
@@ -162,7 +162,7 @@ TONCE NEEDS TO BE IN MILLISECONDS
 
 <h2 id="create-trade">Create Trade</h2>
 <pre class="highlight shell"><code><span class="nv">DATA</span><span class="o">=</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">leverage</span><span class="se">\"</span><span class="s2">:10, </span><span class="se">\"</span><span class="s2">side</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BUY</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">exchange</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bitfinex</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">pair</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BTCUSD</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">margin</span><span class="se">\"</span><span class="s2">:5, </span><span class="se">\"</span><span class="s2">size</span><span class="se">\"</span><span class="s2">:0.2, </span><span class="se">\"</span><span class="s2">take</span><span class="se">\"</span><span class="s2">:10}"</span>
-curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se">\</span>
+curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
   -H <span class="s2">"Accept: application/json"</span> <span class="se">\</span>
@@ -179,7 +179,7 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
  * DO AUTH STUFF HERE TO GENERATE $auth AND $tonce
  */</span>
 
-<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://magnr.com/api/v1/trades/</span><span class="nv">$id</span><span class="s2">/"</span><span class="p">);</span>
+<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span><span class="p">);</span>
 <span class="c1">// Set to a POST request
 </span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_POST</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
@@ -203,13 +203,13 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 <p>Response - 201 CREATED</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;some identifier&gt;"</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">1234</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">POST https://magnr.com/api/v1/trades/</code></p>
+<p><code class="prettyprint">POST /api/v1/trades/</code></p>
 
 <h3 id="body-parameters">BODY Parameters</h3>
 
@@ -319,7 +319,7 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 </tbody></table>
 
 <h2 id="list-trades">List Trades</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Accept: application/json"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
@@ -333,7 +333,7 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
  * DO AUTH STUFF HERE TO SET $auth AND $tonce
  */</span>
 
-<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://magnr.com/api/v1/trades/"</span><span class="p">);</span>
+<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span><span class="p">);</span>
 <span class="c1">// apply headers
 </span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
 
@@ -362,7 +362,7 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET https://magnr.com/api/v1/trades/</code></p>
+<p><code class="prettyprint">GET /api/v1/trades/</code></p>
 
 <h3 id="url-parameters">URL Parameters</h3>
 
@@ -371,7 +371,7 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 <h2 id="get-trade">Get Trade</h2>
 <pre class="highlight shell"><code><span class="nv">ID</span><span class="o">=</span>1234
 // regenerate TONCE and AUTH
-curl <span class="s2">"https://magnr.com/api/v1/trades/</span><span class="nv">$ID</span><span class="s2">/"</span>
+curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span class="nv">$ID</span><span class="s2">/"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Accept: application/json"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
@@ -386,7 +386,7 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/</span><span class="nv">$
  * DO AUTH STUFF HERE TO SET $auth AND $tonce
  */</span>
 
-<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://magnr.com/api/v1/trades/</span><span class="nv">$id</span><span class="s2">/"</span><span class="p">);</span>
+<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span class="nv">$id</span><span class="s2">/"</span><span class="p">);</span>
 <span class="c1">// apply headers
 </span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
 
