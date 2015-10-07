@@ -22,6 +22,7 @@ This documentation is in pre-alpha state.
 ## Error Handling
 
 > Example JSON Error
+
 ```json
 {
   errors: ["some error string", "another error string"]
