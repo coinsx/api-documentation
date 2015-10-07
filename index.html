@@ -82,51 +82,23 @@
 <span class="nx">headers</span><span class="p">.</span><span class="nx">Tonce</span> <span class="o">=</span> <span class="nx">tonce</span><span class="p">;</span>
 </code></pre>
 <pre class="highlight php"><code><span class="cp">&lt;?php</span>
-<span class="nv">$tonce</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nb">microtime</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
 <span class="nv">$privkey</span> <span class="o">=</span> <span class="s2">"your private key"</span><span class="p">;</span>
 <span class="nv">$pubkey</span> <span class="o">=</span> <span class="s2">"your public key"</span><span class="p">;</span>
-<span class="nv">$data</span> <span class="o">=</span> <span class="s2">"empty string or json string"</span><span class="p">;</span>
+
+<span class="c1">// @note SET THIS DATA CORRECTLY ON EACH REQUEST AND BEFORE SIG AND AUTH GENERATION
+</span><span class="nv">$data</span> <span class="o">=</span> <span class="s2">"empty string or json string"</span><span class="p">;</span>
+<span class="nv">$tonce</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nb">microtime</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span>
+
 <span class="nv">$sig</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nb">hash_hmac</span><span class="p">(</span><span class="s2">"sha512"</span><span class="p">,</span> <span class="nv">$tonce</span><span class="o">.</span><span class="nv">$pubkey</span><span class="o">.</span><span class="nv">$data</span><span class="p">,</span> <span class="nv">$privkey</span><span class="p">,</span> <span class="kc">true</span><span class="p">));</span>
 <span class="nv">$auth</span> <span class="o">=</span> <span class="nb">base64_encode</span><span class="p">(</span><span class="nv">$pubkey</span><span class="o">.</span><span class="s2">":"</span><span class="o">.</span><span class="nv">$sig</span><span class="p">);</span>
-
-
-<span class="nv">$url</span> <span class="o">=</span> <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span><span class="p">;</span>
-<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">();</span>
-<span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="nv">$url</span><span class="p">);</span>
-<span class="c1">// apply headers
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
-
-<span class="c1">// define how we want our response.
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// curl_exec returns the result
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// don't include headers in the response from curl_exec
-</span>
-<span class="c1">// optionally, set the POST data if this is a POST request
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_POST</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-<span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
-
-<span class="c1">// follow redirects just in case
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_FOLLOWLOCATION</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-
-<span class="c1">// set timeouts in seconds
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_CONNECTTIMEOUT</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
-<span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_TIMEOUT</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-
-<span class="c1">// gimme gimme!
-</span><span class="nv">$body</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$curl</span><span class="p">);</span>
-<span class="nv">$status</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$status</span> <span class="o">&gt;=</span> <span class="mi">200</span> <span class="o">&amp;&amp;</span> <span class="nv">$status</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">){</span>
-    <span class="c1">// ... handle error like stuff if we care
-</span><span class="p">}</span>
-
-<span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
 </code></pre>
 <pre class="highlight shell"><code><span class="c"># With shell, you can pass a signed header with each request</span>
 <span class="nv">TONCE</span><span class="o">=</span><span class="k">$(($(</span>date +%s<span class="k">)</span><span class="o">*</span><span class="m">1000</span><span class="k">))</span>
-<span class="nv">PRIVKEY</span><span class="o">=</span><span class="s2">"your private key here"</span>
-<span class="nv">PUBKEY</span><span class="o">=</span><span class="s2">"your public key here"</span>
+<span class="nv">PRIVKEY</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -e <span class="s2">"your private key here"</span><span class="sb">`</span>
+<span class="nv">PUBKEY</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -e <span class="s2">"your public key here"</span><span class="sb">`</span>
 <span class="nv">DATA</span><span class="o">=</span><span class="s2">"some json or empty string"</span>
-<span class="nv">SIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$TONCE$PUBKEY$DATA</span><span class="s2">"</span> | openssl dgst -sha512 -hmac <span class="s2">"</span><span class="nv">$PRIVKEY</span><span class="s2">"</span> -binary | base64<span class="sb">`</span>
-<span class="nv">AUTH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$PUBKEY</span><span class="s2">:</span><span class="nv">$SIG</span><span class="s2">"</span> | base64<span class="sb">`</span>
+<span class="nv">SIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -en <span class="s2">"</span><span class="nv">$TONCE$PUBKEY$DATA</span><span class="s2">"</span> | openssl dgst -sha512 -hmac <span class="s2">"</span><span class="nv">$PRIVKEY</span><span class="s2">"</span> -binary | base64<span class="sb">`</span>
+<span class="nv">AUTH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -en <span class="s2">"</span><span class="nv">$PUBKEY</span><span class="s2">:</span><span class="nv">$SIG</span><span class="s2">"</span> | base64<span class="sb">`</span>
 curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
@@ -148,7 +120,7 @@ curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
 <tr>
 <td>Tonce</td>
 <td>yes</td>
-<td>It should be a non-repeating number, and be around a 5 minutes window around the current timestamp.</td>
+<td>It should be a non-repeating number, and be around a 5 minutes window around the current timestamp. THIS TONCE NEEDS TO BE MILLISECONDS</td>
 </tr>
 <tr>
 <td>Authorization</td>
@@ -157,13 +129,13 @@ curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
 </tr>
 </tbody></table>
 
-<aside class="notice">
-Notice&hellip;
+<aside class="warning">
+TONCE needs to be in milliseconds
 </aside>
 
 <h1 id="trading">Trading</h1>
 
-<h2 id="place-trade">Place trade</h2>
+<h2 id="create-trade">Create Trade</h2>
 <pre class="highlight shell"><code><span class="nv">DATA</span><span class="o">=</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">leverage</span><span class="se">\"</span><span class="s2">:10, </span><span class="se">\"</span><span class="s2">side</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BUY</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">exchange</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bitfinex</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">pair</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BTCUSD</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">margin</span><span class="se">\"</span><span class="s2">:5, </span><span class="se">\"</span><span class="s2">size</span><span class="se">\"</span><span class="s2">:0.2, </span><span class="se">\"</span><span class="s2">take</span><span class="se">\"</span><span class="s2">:10}"</span>
 curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
@@ -174,7 +146,7 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
   -d <span class="nv">$DATA</span>
 </code></pre>
 
-<p>Returns 201 CREATED when the trade is correctly placed. Otherwise, please see error list.</p>
+<p>Returns 201 CREATED when the trade is correctly placed. See error list for other response codes.</p>
 
 <blockquote>
 <p>Response - 201 CREATED</p>
@@ -299,18 +271,92 @@ Has to be authenticated
 </tr>
 </tbody></table>
 
-<h2 id="get-trade">Get trade</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/&lt;IDENTIFIER&gt;/"</span>
+<h2 id="list-trades">List Trades</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Accept: application/json"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
   -H <span class="s2">"Tonce: &lt;tonce&gt;"</span>
+</code></pre>
+<pre class="highlight php"><code><span class="cp">&lt;?php</span>
+
+<span class="nv">$data</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+
+<span class="sd">/**
+ * DO AUTH STUFF HERE TO SET $auth AND $tonce
+ */</span>
+
+<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://magnr.com/api/v1/trades/"</span><span class="p">);</span>
+<span class="c1">// apply headers
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
+
+<span class="c1">// define how we want our response.
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// curl_exec returns the result
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// don't include headers in the response from curl_exec
+</span>
+<span class="c1">// gimme gimme!
+</span><span class="nv">$body</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$curl</span><span class="p">);</span>
+<span class="nv">$status</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
+</code></pre>
+
+<blockquote>
+<p>Response - 200 OK</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"trades"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="err">...</span><span class="w"> </span><span class="err">list</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">trades</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">GET https://magnr.com/api/v1/trades/</code></p>
+
+<h3 id="url-parameters">URL Parameters</h3>
+
+<p><code class="prettyprint">NONE</code></p>
+
+<h2 id="get-trade">Get Trade</h2>
+<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/&lt;IDENTIFIER&gt;/"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Accept: application/json"</span>
+  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
+  -H <span class="s2">"Tonce: &lt;tonce&gt;"</span>
+</code></pre>
+<pre class="highlight php"><code><span class="cp">&lt;?php</span>
+
+<span class="nv">$id</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">some</span> <span class="nx">id</span> <span class="nx">returned</span> <span class="nx">from</span> <span class="o">/</span><span class="nx">trades</span><span class="o">/</span> <span class="nx">call</span><span class="o">&gt;</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+
+<span class="sd">/**
+ * DO AUTH STUFF HERE TO SET $auth AND $tonce
+ */</span>
+
+<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://magnr.com/api/v1/trades/</span><span class="nv">$id</span><span class="s2">/"</span><span class="p">);</span>
+<span class="c1">// apply headers
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
+
+<span class="c1">// define how we want our response.
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// curl_exec returns the result
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// don't include headers in the response from curl_exec
+</span>
+<span class="c1">// gimme gimme!
+</span><span class="nv">$body</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$curl</span><span class="p">);</span>
+<span class="nv">$status</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
 </code></pre>
 
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
-</span><span class="p">}</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"more fields here"</span><span class="err">...</span><span class="w">
+</span><span class="err">}</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint retrieves a specific trade.</p>
