@@ -112,6 +112,8 @@ curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
   -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
   -d <span class="nv">$DATA</span>
+
+Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
 </code></pre>
 
 <p>We use pairs of long-lived application keys to authenticate requests. Please contact <a href="mailto:support@magnr.com">support@magnr.com</a> to request an API key .</p>
@@ -137,8 +139,8 @@ curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
 </tr>
 </tbody></table>
 
-<aside class="warning">
-TONCE needs to be in milliseconds
+<aside class="notice">
+TONCE NEEDS TO BE IN MILLISECONDS
 </aside>
 
 <h1 id="trading">Trading</h1>
