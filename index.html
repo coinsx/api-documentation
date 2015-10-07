@@ -55,13 +55,12 @@
 <h2 id="error-handling">Error Handling</h2>
 
 <blockquote>
-<p>Example JSON Error
-<code class="prettyprint">json
-{
-  errors: [&quot;some error string&quot;, &quot;another error string&quot;]
-}
-</code></p>
+<p>Example JSON Error</p>
 </blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="err">errors:</span><span class="w"> </span><span class="err">[</span><span class="nt">"some error string"</span><span class="err">,</span><span class="w"> </span><span class="nt">"another error string"</span><span class="err">]</span><span class="w">
+</span><span class="err">}</span><span class="w">
+</span></code></pre>
 
 <p>All errors follow general REST principles. Included in the body of any error response (e.g. non-2xx status code) will be an error object of the form:</p>
 
