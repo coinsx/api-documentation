@@ -250,17 +250,19 @@ echo "STATUS: $status\nBODY:\n$body";
 ## Get Trade
 
 ```shell
-curl "https://magnr.com/api/v1/trades/<IDENTIFIER>/"
+ID=1234
+// regenerate TONCE and AUTH
+curl "https://magnr.com/api/v1/trades/$ID/"
   -H "Content-Type: application/json"
   -H "Accept: application/json"
   -H "Authorization: Basic $AUTH"
-  -H "Tonce: <tonce>"
+  -H "Tonce: $TONCE"
 ```
 
 ```php
 <?php
 
-$id = <some id returned from /trades/ call>
+$id = 1234;
 $data = "";
 
 /**
@@ -282,24 +284,38 @@ $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 echo "STATUS: $status\nBODY:\n$body";
 ```
 
-> The above command returns JSON structured like this:
+> Example response
 
 ```json
 {
-  "id": 2,
-  "more fields here":""
+  "trade": {
+    "id": 2,
+    "more fields here":""
+  }
 }
 ```
 
 This endpoint retrieves a specific trade.
 
-### HTTP Request
+### HTTP REQUEST
 
-`GET https://magnr.com/api/v1/trades/<IDENTIFIER>/`
+`GET /api/v1/trades/:id/`
 
-### URL Parameters
+### URL PARAMETERS
 
-Parameter | Description
+Parameter | Type | Required | Description
 --------- | -----------
-ID | The ID of the trade to retrieve
+id | string | YES | The ID of the trade to retrieve
+
+### RESPONSE
+
+Returns a Trade object 
+
+### ERRORS
+
+Response | Description
+-------- | -----------
+400 Bad Request | The request parameters were missing or incorrect
+404 Not Found | The trade you requested does not exist
+500 Internal Server Error | The system encountered an error
 
