@@ -84,7 +84,7 @@ PUBKEY=`echo -e "your public key here"`
 DATA="some json or empty string"
 SIG=`echo -en "$TONCE$PUBKEY$DATA" | openssl dgst -sha512 -hmac "$PRIVKEY" -binary | base64`
 AUTH=`echo -en "$PUBKEY:$SIG" | base64`
-curl "https://magnr.com/api/v1/<some end point>/"
+curl "https://sandbox.magnr.com/api/v1/<some end point>/"
   -H "Content-Type: application/json"
   -H "Authorization: Basic $AUTH"
   -H "Tonce: $TONCE"
@@ -112,7 +112,7 @@ TONCE NEEDS TO BE IN MILLISECONDS
 
 ```shell
 DATA="{\"leverage\":10, \"side\":\"BUY\", \"exchange\":\"Bitfinex\", \"pair\":\"BTCUSD\", \"margin\":5, \"size\":0.2, \"take\":10}"
-curl "https://magnr.com/api/v1/trades/" \
+curl "https://sandbox.magnr.com/api/v1/trades/" \
   -X POST \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
@@ -131,7 +131,7 @@ $data = json_encode(["leverage"=>10, "side"=>"buy", "exchange"=>"Bitfinex", "pai
  * DO AUTH STUFF HERE TO GENERATE $auth AND $tonce
  */
 
-$curl = curl_init("https://magnr.com/api/v1/trades/$id/");
+$curl = curl_init("https://sandbox.magnr.com/api/v1/trades/");
 // Set to a POST request
 curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
@@ -155,13 +155,13 @@ echo "STATUS: $status\nBODY:\n$body";
 
 ```json
 {
-  "id":"<some identifier>"
+  "id":1234
 }
 ```
 
 ### HTTP Request
 
-`POST https://magnr.com/api/v1/trades/`
+`POST /api/v1/trades/`
 
 ### BODY Parameters
 
@@ -193,7 +193,7 @@ Response | Description
 ## List Trades
 
 ```shell
-curl "https://magnr.com/api/v1/trades/"
+curl "https://sandbox.magnr.com/api/v1/trades/"
   -H "Content-Type: application/json"
   -H "Accept: application/json"
   -H "Authorization: Basic $AUTH"
@@ -209,7 +209,7 @@ $data = "";
  * DO AUTH STUFF HERE TO SET $auth AND $tonce
  */
 
-$curl = curl_init("https://magnr.com/api/v1/trades/");
+$curl = curl_init("https://sandbox.magnr.com/api/v1/trades/");
 // apply headers
 curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
 
@@ -238,7 +238,7 @@ echo "STATUS: $status\nBODY:\n$body";
 
 ### HTTP Request
 
-`GET https://magnr.com/api/v1/trades/`
+`GET /api/v1/trades/`
 
 ### URL Parameters
 
@@ -251,7 +251,7 @@ echo "STATUS: $status\nBODY:\n$body";
 ```shell
 ID=1234
 // regenerate TONCE and AUTH
-curl "https://magnr.com/api/v1/trades/$ID/"
+curl "https://sandbox.magnr.com/api/v1/trades/$ID/"
   -H "Content-Type: application/json"
   -H "Accept: application/json"
   -H "Authorization: Basic $AUTH"
@@ -268,7 +268,7 @@ $data = "";
  * DO AUTH STUFF HERE TO SET $auth AND $tonce
  */
 
-$curl = curl_init("https://magnr.com/api/v1/trades/$id/");
+$curl = curl_init("https://sandbox.magnr.com/api/v1/trades/$id/");
 // apply headers
 curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
 
