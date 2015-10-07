@@ -122,10 +122,11 @@ In the SANDBOX environment it is advisable to utilise the &ldquo;LOCAL&rdquo; ex
 <span class="nv">DATA</span><span class="o">=</span><span class="s2">"some json or empty string"</span>
 <span class="nv">SIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -en <span class="s2">"</span><span class="nv">$TONCE$PUBKEY$DATA</span><span class="s2">"</span> | openssl dgst -sha512 -hmac <span class="s2">"</span><span class="nv">$PRIVKEY</span><span class="s2">"</span> -binary | base64<span class="sb">`</span>
 <span class="nv">AUTH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -en <span class="s2">"</span><span class="nv">$PUBKEY</span><span class="s2">:</span><span class="nv">$SIG</span><span class="s2">"</span> | base64<span class="sb">`</span>
-curl <span class="s2">"https://sandbox.magnr.com/api/v1/&lt;some end point&gt;/"</span>
-  -H <span class="s2">"Content-Type: application/json"</span>
-  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
-  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
+
+curl <span class="s2">"https://sandbox.magnr.com/api/v1/&lt;some end point&gt;/"</span> <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
+  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span> <span class="se">\</span>
+  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span> <span class="se">\</span>
   -d <span class="nv">$DATA</span>
 
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
@@ -199,14 +200,6 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 </span><span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
 </code></pre>
 
-<blockquote>
-<p>Response - 201 CREATED</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">1234</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-
 <h3 id="http-request">HTTP Request</h3>
 
 <p><code class="prettyprint">POST /api/v1/trades/</code></p>
@@ -279,6 +272,14 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 <td>The amount in $USD you wish the price to move in your favour before closing out.</td>
 </tr>
 </tbody></table>
+
+<blockquote>
+<p>Example response - 201 CREATED</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">1234</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
 
 <h3 id="response">RESPONSE</h3>
 
