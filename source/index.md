@@ -84,10 +84,11 @@ PUBKEY=`echo -e "your public key here"`
 DATA="some json or empty string"
 SIG=`echo -en "$TONCE$PUBKEY$DATA" | openssl dgst -sha512 -hmac "$PRIVKEY" -binary | base64`
 AUTH=`echo -en "$PUBKEY:$SIG" | base64`
-curl "https://sandbox.magnr.com/api/v1/<some end point>/"
-  -H "Content-Type: application/json"
-  -H "Authorization: Basic $AUTH"
-  -H "Tonce: $TONCE"
+
+curl "https://sandbox.magnr.com/api/v1/<some end point>/" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic $AUTH" \
+  -H "Tonce: $TONCE" \
   -d $DATA
   
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
@@ -151,14 +152,6 @@ $json = json_decode($body,true); // the json as an array
 echo "STATUS: $status\nBODY:\n$body";
 ```
 
-> Response - 201 CREATED
-
-```json
-{
-  "id":1234
-}
-```
-
 ### HTTP Request
 
 `POST /api/v1/trades/`
@@ -175,6 +168,14 @@ margin | float | YES | none | An amount in $USD the price can move against you b
 size | float | YES | none | Size of the position to market.
 type | string | NO | market | market is the only option at present
 take |float | NO | none | The amount in $USD you wish the price to move in your favour before closing out.
+
+> Example response - 201 CREATED
+
+```json
+{
+  "id":1234
+}
+```
 
 ### RESPONSE
 
