@@ -241,7 +241,7 @@ echo "STATUS: $status\nBODY:\n$body";
         "closed_at":1444612316,
         "open_price": 234.45,
         "close_price": 235.56,
-        "closed_reason":"user"
+        "closed_reason":"user",
         "trades_fees": 0.004,
         "daily_fees": 0.00,
         "status": "settled",
@@ -258,7 +258,7 @@ echo "STATUS: $status\nBODY:\n$body";
         "closed_at":1444612316,
         "open_price": 234.45,
         "close_price": 235.56,
-        "closed_reason":"stop"
+        "closed_reason":"stop",
         "trades_fees": 0.002,
         "daily_fees": 0.0009,
         "status": "settled",
@@ -328,7 +328,7 @@ echo "STATUS: $status\nBODY:\n$body";
     "closed_at":1444612316,
     "open_price": 234.45,
     "close_price": 235.56,
-    "closed_reason":"user"
+    "closed_reason":"user",
     "trades_fees": 0.004,
     "daily_fees": 0.00,
     "status": "settled",
