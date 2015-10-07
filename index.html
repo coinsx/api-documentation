@@ -13,7 +13,7 @@
 
       <script>
         $(function() {
-          setupLanguages(["javascript","shell","php"]);
+          setupLanguages(["shell","javascript","php"]);
         });
       </script>
   </head>
@@ -28,8 +28,8 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
         <div class="lang-selector">
-              <a href="#" data-language-name="javascript">javascript</a>
               <a href="#" data-language-name="shell">shell</a>
+              <a href="#" data-language-name="javascript">javascript</a>
               <a href="#" data-language-name="php">php</a>
         </div>
         <div class="search">
@@ -73,25 +73,63 @@
 <blockquote>
 <p>Example of authentication</p>
 </blockquote>
-<pre class="highlight javascript"><code>    <span class="c1">// transform all request to include basic auth.</span>
-    <span class="kd">var</span> <span class="nx">tonce</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// any tonce</span>
-    <span class="kd">var</span> <span class="nx">shaObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">jsSHA</span><span class="p">(</span><span class="nx">tonce</span> <span class="o">+</span> <span class="nx">publicKey</span> <span class="o">+</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">hmacSignature</span> <span class="o">=</span> <span class="nx">shaObj</span><span class="p">.</span><span class="nx">getHMAC</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">,</span> <span class="s2">"SHA-512"</span><span class="p">,</span> <span class="s2">"B64"</span><span class="p">);</span>
+<pre class="highlight javascript"><code><span class="c1">// transform all request to include basic auth.</span>
+<span class="kd">var</span> <span class="nx">tonce</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// any tonce</span>
+<span class="kd">var</span> <span class="nx">shaObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">jsSHA</span><span class="p">(</span><span class="nx">tonce</span> <span class="o">+</span> <span class="nx">publicKey</span> <span class="o">+</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">hmacSignature</span> <span class="o">=</span> <span class="nx">shaObj</span><span class="p">.</span><span class="nx">getHMAC</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">,</span> <span class="s2">"SHA-512"</span><span class="p">,</span> <span class="s2">"B64"</span><span class="p">);</span>
 
-    <span class="nx">headers</span><span class="p">.</span><span class="nx">Authorization</span> <span class="o">=</span> <span class="s2">"Basic "</span> <span class="o">+</span> <span class="nx">Base64</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">publicKey</span> <span class="o">+</span> <span class="s2">":"</span> <span class="o">+</span> <span class="nx">hmacSignature</span><span class="p">);</span>
-    <span class="nx">headers</span><span class="p">.</span><span class="nx">Tonce</span> <span class="o">=</span> <span class="nx">tonce</span><span class="p">;</span>
+<span class="nx">headers</span><span class="p">.</span><span class="nx">Authorization</span> <span class="o">=</span> <span class="s2">"Basic "</span> <span class="o">+</span> <span class="nx">Base64</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="nx">publicKey</span> <span class="o">+</span> <span class="s2">":"</span> <span class="o">+</span> <span class="nx">hmacSignature</span><span class="p">);</span>
+<span class="nx">headers</span><span class="p">.</span><span class="nx">Tonce</span> <span class="o">=</span> <span class="nx">tonce</span><span class="p">;</span>
+</code></pre>
+<pre class="highlight php"><code>$tonce = intval(microtime(true)*1000);
+$privkey = "your private key";
+$pubkey = "your public key";
+$data = json_encode(["key"=&gt;"value"]);
+$sig = base64_encode(hash_hmac("sha512", $tonce.$pubkey.$data, $privkey, true));
+$auth = base64_encode($pubkey.":".$sig);
+
+
+$url = "https://magnr.com/api/v1/<span class="nt">&lt;some</span> <span class="na">end</span> <span class="na">point</span><span class="nt">&gt;</span>/";
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $url);
+// apply headers
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
+
+// define how we want our response.
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
+curl_setopt($curl, CURLOPT_HEADER, 0); // don't include headers in the response from curl_exec
+
+// optionally, set the POST data if this is a POST request
+curl_setopt($curl, CURLOPT_POST, true);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+// follow redirects just in case
+curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+
+// set timeouts in seconds
+curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
+curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+
+// gimme gimme!
+$body = curl_exec($curl);
+$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+if($status &gt;= 200 <span class="err">&amp;&amp;</span> $status <span class="nt">&lt; 300</span><span class="err">){</span>
+    <span class="err">//</span> <span class="err">...</span> <span class="na">handle</span> <span class="na">error</span> <span class="na">like</span> <span class="na">stuff</span> <span class="na">if</span> <span class="na">we</span> <span class="na">care</span>
+<span class="err">}</span>
+
+<span class="na">echo</span> <span class="err">"</span><span class="na">STATUS:</span> <span class="err">$</span><span class="na">status</span><span class="err">\</span><span class="na">nBODY:</span><span class="err">\</span><span class="na">n</span><span class="err">$</span><span class="na">body</span><span class="err">";</span>
 </code></pre>
 <pre class="highlight shell"><code><span class="c"># With shell, you can pass a signed header with each request</span>
-<span class="nv">TONCE</span><span class="o">=</span><span class="sb">`</span>date +%s<span class="sb">`</span>
+<span class="nv">TONCE</span><span class="o">=</span><span class="sb">`</span><span class="k">$(($(</span>date +%s<span class="k">)</span><span class="o">*</span><span class="m">1000</span><span class="k">))</span><span class="sb">`</span>
 <span class="nv">PRIVKEY</span><span class="o">=</span><span class="s2">"your private key here"</span>
 <span class="nv">PUBKEY</span><span class="o">=</span><span class="s2">"your public key here"</span>
 <span class="nv">DATA</span><span class="o">=</span><span class="s2">"some json or empty string"</span>
 <span class="nv">SIG</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$TONCE$PUBKEY$DATA</span><span class="s2">"</span> | openssl dgst -sha512 -hmac <span class="s2">"</span><span class="nv">$PRIVKEY</span><span class="s2">"</span> -binary | base64<span class="sb">`</span>
 <span class="nv">AUTH</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> -n <span class="s2">"</span><span class="nv">$PUBKEY</span><span class="s2">:</span><span class="nv">$SIG</span><span class="s2">"</span> | base64<span class="sb">`</span>
-curl <span class="s2">"/api/v1/&lt;some end point&gt;/"</span>
+curl <span class="s2">"https://magnr.com/api/v1/&lt;some end point&gt;/"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
   -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
-  ...
+  -d <span class="nv">$DATA</span>
 </code></pre>
 
 <blockquote>
@@ -128,17 +166,17 @@ Notice&hellip;
 <h1 id="trading">Trading</h1>
 
 <h2 id="place-trade">Place trade</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://btc.sx/v1/api/trades"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/v1/api/trades/"</span>
   -X POST
-  -H <span class="s2">"Authorization: Basic &lt;AUTH&gt;"</span>
-  -H <span class="s2">"Tonce: &lt;tonce&gt;"</span>
+  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
+  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
   -d <span class="s1">'{"leverage":10, "side":"BUY", "exchange":"Bitfinex", "pair":"BTCUSD", "margin":5, "size":0.2, "take":10}'</span>
 </code></pre>
 
 <p>Returns 201 CREATED when the trade is correctly placed. Otherwise, please see error list.</p>
 
 <blockquote>
-<p>Response</p>
+<p>Response - 201 CREATED</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;some identifier&gt;"</span><span class="w">
@@ -261,8 +299,8 @@ Has to be authenticated
 </tbody></table>
 
 <h2 id="get-trade">Get trade</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/"</span>
-  -H <span class="s2">"Authorization: Basic &lt;AUTH&gt;"</span>
+<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/&lt;IDENTIFIER&gt;/"</span>
+  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
   -H <span class="s2">"Tonce: &lt;tonce&gt;"</span>
 </code></pre>
 
@@ -278,7 +316,7 @@ Has to be authenticated
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET https://magnr.com/api/v1/trades/&lt;ID&gt;</code></p>
+<p><code class="prettyprint">GET https://magnr.com/api/v1/trades/&lt;IDENTIFIER&gt;/</code></p>
 
 <h3 id="url-parameters">URL Parameters</h3>
 
@@ -297,8 +335,8 @@ Has to be authenticated
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="javascript">javascript</a>
                 <a href="#" data-language-name="shell">shell</a>
+                <a href="#" data-language-name="javascript">javascript</a>
                 <a href="#" data-language-name="php">php</a>
           </div>
       </div>
