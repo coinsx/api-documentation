@@ -52,14 +52,29 @@
 
 <p>This documentation is in pre-alpha state.</p>
 
+<h2 id="environments">Environments</h2>
+
+<p>Magnr provides two API environments. </p>
+
+<ol>
+<li>A production environent at https://magnr.com/api/v1/</li>
+<li>A sandbox environment at https://sandbox.magnr.com/api/v1/</li>
+</ol>
+
+<p>Tokens between the 2 environments differ so you will have to request one token from each environment separately.</p>
+
+<aside class="notice">
+In the SANDBOX environment it is advisable to utilise the &ldquo;LOCAL&rdquo; exchange and &ldquo;BTCUSD&rdquo; currency pair instead of the known production exchanges/pairs.
+</aside>
+
 <h2 id="error-handling">Error Handling</h2>
 
 <blockquote>
 <p>Example JSON Error</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="err">errors:</span><span class="w"> </span><span class="err">[</span><span class="nt">"some error string"</span><span class="err">,</span><span class="w"> </span><span class="nt">"another error string"</span><span class="err">]</span><span class="w">
-</span><span class="err">}</span><span class="w">
+  </span><span class="nt">"errors"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"some error string"</span><span class="p">,</span><span class="w"> </span><span class="s2">"another error string"</span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <p>All errors follow general REST principles. Included in the body of any error response (e.g. non-2xx status code) will be an error object of the form:</p>
@@ -316,7 +331,9 @@ Has to be authenticated
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"trades"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="err">...</span><span class="w"> </span><span class="err">list</span><span class="w"> </span><span class="err">of</span><span class="w"> </span><span class="err">trades</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
