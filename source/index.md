@@ -177,10 +177,6 @@ size | float | YES | none | Size of the position to market.
 type | string | NO | market | market is the only option at present
 take |float | NO | none | The amount in $USD you wish the price to move in your favour before closing out.
 
-<aside class="success">
-Has to be authenticated
-</aside>
-
 ### RESPONSE
 
 Parameter | Type | Description
