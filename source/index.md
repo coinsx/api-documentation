@@ -47,7 +47,7 @@ headers.Tonce = tonce;
 $tonce = intval(microtime(true)*1000);
 $privkey = "your private key";
 $pubkey = "your public key";
-$data = json_encode(["key"=>"value"]);
+$data = "empty string or json string";
 $sig = base64_encode(hash_hmac("sha512", $tonce.$pubkey.$data, $privkey, true));
 $auth = base64_encode($pubkey.":".$sig);
 
@@ -85,19 +85,18 @@ echo "STATUS: $status\nBODY:\n$body";
 
 ```shell
 # With shell, you can pass a signed header with each request
-TONCE=`$(($(date +%s)*1000))`
+TONCE=$(($(date +%s)*1000))
 PRIVKEY="your private key here"
 PUBKEY="your public key here"
 DATA="some json or empty string"
 SIG=`echo -n "$TONCE$PUBKEY$DATA" | openssl dgst -sha512 -hmac "$PRIVKEY" -binary | base64`
 AUTH=`echo -n "$PUBKEY:$SIG" | base64`
 curl "https://magnr.com/api/v1/<some end point>/"
+  -H "Content-Type: application/json"
   -H "Authorization: Basic $AUTH"
   -H "Tonce: $TONCE"
   -d $DATA
 ```
-
-> Make sure to replace "$AUTH" with the result of the HMAC signature, and "$TONCE" with the tonce used in the request.
 
 We use pairs of long-lived application keys to authenticate requests. Please contact <support@magnr.com> to request an API key .
 
@@ -119,11 +118,14 @@ Notice...
 ## Place trade
 
 ```shell
-curl "https://magnr.com/v1/api/trades/"
-  -X POST
-  -H "Authorization: Basic $AUTH"
-  -H "Tonce: $TONCE"
-  -d '{"leverage":10, "side":"BUY", "exchange":"Bitfinex", "pair":"BTCUSD", "margin":5, "size":0.2, "take":10}'
+DATA="{\"leverage\":10, \"side\":\"BUY\", \"exchange\":\"Bitfinex\", \"pair\":\"BTCUSD\", \"margin\":5, \"size\":0.2, \"take\":10}"
+curl "https://magnr.com/api/v1/trades/" \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Authorization: Basic $AUTH" \
+  -H "Tonce: $TONCE" \
+  -d $DATA
 ```
 
 Returns 201 CREATED when the trade is correctly placed. Otherwise, please see error list.
