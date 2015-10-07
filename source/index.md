@@ -230,9 +230,40 @@ echo "STATUS: $status\nBODY:\n$body";
 ```json
 {
   "trades": [
-    {"id":1},
-    {"id":2},
-    {"id":3}
+    {
+        "id"  : 1234,
+        "side": "buy",
+        "leverage": 10,
+        "size": 0.2,
+        "deposit": 0.002,
+        "exchange":"LOCAL",
+        "created_at":1444230624,
+        "closed_at":1444612316,
+        "open_price": 234.45,
+        "close_price": 235.56,
+        "closed_reason":"user"
+        "trades_fees": 0.004,
+        "daily_fees": 0.00,
+        "status": "settled",
+        "profit": 0.00019382
+    },
+    {
+        "id"  : 1235,
+        "side": "sell",
+        "leverage": 5,
+        "size": 0.3,
+        "deposit": 0.008,
+        "exchange":"LOCAL",
+        "created_at":1444230624,
+        "closed_at":1444612316,
+        "open_price": 234.45,
+        "close_price": 235.56,
+        "closed_reason":"stop"
+        "trades_fees": 0.002,
+        "daily_fees": 0.0009,
+        "status": "settled",
+        "profit": -0.00000667
+      }
   ]
 }
 ```
@@ -244,8 +275,6 @@ echo "STATUS: $status\nBODY:\n$body";
 ### URL Parameters
 
 `NONE`
-
-
 
 ## Get Trade
 
@@ -289,8 +318,21 @@ echo "STATUS: $status\nBODY:\n$body";
 ```json
 {
   "trade": {
-    "id": 2,
-    "more fields here":""
+    "id"  : 1234,
+    "side": "buy",
+    "leverage": 10,
+    "size": 0.2,
+    "deposit": 0.002,
+    "exchange":"LOCAL",
+    "created_at":1444230624,
+    "closed_at":1444612316,
+    "open_price": 234.45,
+    "close_price": 235.56,
+    "closed_reason":"user"
+    "trades_fees": 0.004,
+    "daily_fees": 0.00,
+    "status": "settled",
+    "profit": 0.00019382
   }
 }
 ```
@@ -310,6 +352,29 @@ id | string | YES | The ID of the trade to retrieve
 ### RESPONSE
 
 Returns a Trade object 
+
+Field   | Type   | Description
+------- | ------ | -----------
+id      | string | id of the trade
+side    | string | "buy" or "sell"
+leverage| int    | the leverage applied on the trade
+size    | float  | size of the trade at market
+deposit | float  | size of the deposit taken for the trade
+exchange      | string | the name of the exchange that the trade was opened on
+created_at    | int    | timestamp of trade creation (in seconds since epoch)
+closed_at     | int    | timestamp of the trade close (in seconds since epoch)
+open_price    | float  | price the trade was opened at
+close_price   | float  | price the trade closed at
+closed_reason | string | the reason the trade closed (user,stop,limit,insufficient funds)
+trade_fees    | float  | bitcoin charge applied to the trade (this includes BOTH open AND close fees)
+daily_fees    | float  | bitcoin charge applied to the trade on a 24 hour basis
+status  | string | the state of the trade (pending -> open -> closed -> settled)
+profit  | float  | the profit on the trade if it has settled, otherwise NULL
+stopMargin  | float  | size in currency (e.g. USD) of the stop margin
+trailMargin | float  | size in currency (e.g. USD) of the trailing stop, otherwise NULL if not set
+sellLimit   | float  | size in currency (e.g. USD) of the sell limit, otherwise NULL if not set
+tradeRate   | float  | trade charge PERCENTAGE (e.g. 0.48%)
+dailyRate   | float  | daily charge PERCENTAGE (e.g. 0.2%)
 
 ### ERRORS
 
