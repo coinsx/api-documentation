@@ -303,7 +303,7 @@ This endpoint retrieves a specific trade.
 ### URL PARAMETERS
 
 Parameter | Type | Required | Description
---------- | -----------
+--------- | ----------- |----- | ------
 id | string | YES | The ID of the trade to retrieve
 
 ### RESPONSE
