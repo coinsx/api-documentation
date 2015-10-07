@@ -19,13 +19,26 @@ Welcome to the magnr.com Trading API.
 
 This documentation is in pre-alpha state.
 
+## Environments
+
+Magnr provides two API environments. 
+
+1. A production environent at https://magnr.com/api/v1/
+2. A sandbox environment at https://sandbox.magnr.com/api/v1/
+
+Tokens between the 2 environments differ so you will have to request one token from each environment separately.
+
+<aside class="notice">
+In the SANDBOX environment it is advisable to utilise the "LOCAL" exchange and "BTCUSD" currency pair instead of the known production exchanges/pairs.
+</aside>
+
 ## Error Handling
 
 > Example JSON Error
 
 ```json
 {
-  errors: ["some error string", "another error string"]
+  "errors": ["some error string", "another error string"]
 }
 ```
 
@@ -192,7 +205,9 @@ echo "STATUS: $status\nBODY:\n$body";
 ```json
 {
   "trades": [
-    ... list of trades
+    {"id":1},
+    {"id":2},
+    {"id":3}
   ]
 }
 ```
