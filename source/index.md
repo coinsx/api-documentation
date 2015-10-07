@@ -126,7 +126,7 @@ Returns 201 CREATED when the trade is correctly placed. See error list for other
 > Response - 201 CREATED
 
 ```php
-
+<?php
 $data = json_encode(["leverage"=>10, "side"=>"buy", "exchange"=>"Bitfinex", "pair"=>"BTCUSD", "margin"=>5, "size"=>0.2, "take"=>10]);
 
 /**
