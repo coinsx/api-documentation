@@ -354,9 +354,40 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"trades"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span><span class="w">
-    </span><span class="p">{</span><span class="nt">"id"</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="mi">1234</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"buy"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"deposit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.002</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"exchange"</span><span class="p">:</span><span class="s2">"LOCAL"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"created_at"</span><span class="p">:</span><span class="mi">1444230624</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"closed_at"</span><span class="p">:</span><span class="mi">1444612316</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"open_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">234.45</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"close_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">235.56</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"closed_reason"</span><span class="p">:</span><span class="s2">"user"</span><span class="w">
+        </span><span class="s2">"trades_fees"</span><span class="err">:</span><span class="w"> </span><span class="mf">0.004</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"daily_fees"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"settled"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00019382</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"id"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="mi">1235</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sell"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"deposit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.008</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"exchange"</span><span class="p">:</span><span class="s2">"LOCAL"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"created_at"</span><span class="p">:</span><span class="mi">1444230624</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"closed_at"</span><span class="p">:</span><span class="mi">1444612316</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"open_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">234.45</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"close_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">235.56</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"closed_reason"</span><span class="p">:</span><span class="s2">"stop"</span><span class="w">
+        </span><span class="s2">"trades_fees"</span><span class="err">:</span><span class="w"> </span><span class="mf">0.002</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"daily_fees"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0009</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"settled"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.00000667</span><span class="w">
+      </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -407,8 +438,21 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"trade"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"more fields here"</span><span class="p">:</span><span class="s2">""</span><span class="w">
+    </span><span class="nt">"id"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="mi">1234</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"side"</span><span class="p">:</span><span class="w"> </span><span class="s2">"buy"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"leverage"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"size"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"deposit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.002</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"exchange"</span><span class="p">:</span><span class="s2">"LOCAL"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"created_at"</span><span class="p">:</span><span class="mi">1444230624</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"closed_at"</span><span class="p">:</span><span class="mi">1444612316</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"open_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">234.45</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"close_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">235.56</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"closed_reason"</span><span class="p">:</span><span class="s2">"user"</span><span class="w">
+    </span><span class="s2">"trades_fees"</span><span class="err">:</span><span class="w"> </span><span class="mf">0.004</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"daily_fees"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"settled"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"profit"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00019382</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
@@ -440,6 +484,115 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <h3 id="response">RESPONSE</h3>
 
 <p>Returns a Trade object </p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>id of the trade</td>
+</tr>
+<tr>
+<td>side</td>
+<td>string</td>
+<td>&ldquo;buy&rdquo; or &ldquo;sell&rdquo;</td>
+</tr>
+<tr>
+<td>leverage</td>
+<td>int</td>
+<td>the leverage applied on the trade</td>
+</tr>
+<tr>
+<td>size</td>
+<td>float</td>
+<td>size of the trade at market</td>
+</tr>
+<tr>
+<td>deposit</td>
+<td>float</td>
+<td>size of the deposit taken for the trade</td>
+</tr>
+<tr>
+<td>exchange</td>
+<td>string</td>
+<td>the name of the exchange that the trade was opened on</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>int</td>
+<td>timestamp of trade creation (in seconds since epoch)</td>
+</tr>
+<tr>
+<td>closed_at</td>
+<td>int</td>
+<td>timestamp of the trade close (in seconds since epoch)</td>
+</tr>
+<tr>
+<td>open_price</td>
+<td>float</td>
+<td>price the trade was opened at</td>
+</tr>
+<tr>
+<td>close_price</td>
+<td>float</td>
+<td>price the trade closed at</td>
+</tr>
+<tr>
+<td>closed_reason</td>
+<td>string</td>
+<td>the reason the trade closed (user,stop,limit,insufficient funds)</td>
+</tr>
+<tr>
+<td>trade_fees</td>
+<td>float</td>
+<td>bitcoin charge applied to the trade (this includes BOTH open AND close fees)</td>
+</tr>
+<tr>
+<td>daily_fees</td>
+<td>float</td>
+<td>bitcoin charge applied to the trade on a 24 hour basis</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>the state of the trade (pending -&gt; open -&gt; closed -&gt; settled)</td>
+</tr>
+<tr>
+<td>profit</td>
+<td>float</td>
+<td>the profit on the trade if it has settled, otherwise NULL</td>
+</tr>
+<tr>
+<td>stopMargin</td>
+<td>float</td>
+<td>size in currency (e.g. USD) of the stop margin</td>
+</tr>
+<tr>
+<td>trailMargin</td>
+<td>float</td>
+<td>size in currency (e.g. USD) of the trailing stop, otherwise NULL if not set</td>
+</tr>
+<tr>
+<td>sellLimit</td>
+<td>float</td>
+<td>size in currency (e.g. USD) of the sell limit, otherwise NULL if not set</td>
+</tr>
+<tr>
+<td>tradeRate</td>
+<td>float</td>
+<td>trade charge PERCENTAGE (e.g. 0.48%)</td>
+</tr>
+<tr>
+<td>dailyRate</td>
+<td>float</td>
+<td>daily charge PERCENTAGE (e.g. 0.2%)</td>
+</tr>
+</tbody></table>
 
 <h3 id="errors">ERRORS</h3>
 
