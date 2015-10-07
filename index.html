@@ -369,15 +369,17 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 <p><code class="prettyprint">NONE</code></p>
 
 <h2 id="get-trade">Get Trade</h2>
-<pre class="highlight shell"><code>curl <span class="s2">"https://magnr.com/api/v1/trades/&lt;IDENTIFIER&gt;/"</span>
+<pre class="highlight shell"><code><span class="nv">ID</span><span class="o">=</span>1234
+// regenerate TONCE and AUTH
+curl <span class="s2">"https://magnr.com/api/v1/trades/</span><span class="nv">$ID</span><span class="s2">/"</span>
   -H <span class="s2">"Content-Type: application/json"</span>
   -H <span class="s2">"Accept: application/json"</span>
   -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
-  -H <span class="s2">"Tonce: &lt;tonce&gt;"</span>
+  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
 </code></pre>
 <pre class="highlight php"><code><span class="cp">&lt;?php</span>
 
-<span class="nv">$id</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nx">some</span> <span class="nx">id</span> <span class="nx">returned</span> <span class="nx">from</span> <span class="o">/</span><span class="nx">trades</span><span class="o">/</span> <span class="nx">call</span><span class="o">&gt;</span>
+<span class="nv">$id</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">;</span>
 <span class="nv">$data</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
 
 <span class="sd">/**
@@ -400,31 +402,51 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 </code></pre>
 
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Example response</p>
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"more fields here"</span><span class="p">:</span><span class="s2">""</span><span class="w">
+  </span><span class="nt">"trade"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"more fields here"</span><span class="p">:</span><span class="s2">""</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint retrieves a specific trade.</p>
 
-<h3 id="http-request">HTTP Request</h3>
+<h3 id="http-request">HTTP REQUEST</h3>
 
-<p><code class="prettyprint">GET https://magnr.com/api/v1/trades/&lt;IDENTIFIER&gt;/</code></p>
+<p><code class="prettyprint">GET /api/v1/trades/:id/</code></p>
 
-<h3 id="url-parameters">URL Parameters</h3>
+<h3 id="url-parameters">URL PARAMETERS</h3>
+
+<p>Parameter | Type | Required | Description
+&mdash;&mdash;&mdash; | &mdash;&mdash;&mdash;&ndash;
+id | string | YES | The ID of the trade to retrieve</p>
+
+<h3 id="response">RESPONSE</h3>
+
+<p>Returns a Trade object </p>
+
+<h3 id="errors">ERRORS</h3>
 
 <table><thead>
 <tr>
-<th>Parameter</th>
+<th>Response</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the trade to retrieve</td>
+<td>400 Bad Request</td>
+<td>The request parameters were missing or incorrect</td>
+</tr>
+<tr>
+<td>404 Not Found</td>
+<td>The trade you requested does not exist</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>The system encountered an error</td>
 </tr>
 </tbody></table>
 
