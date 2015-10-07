@@ -43,6 +43,7 @@ headers.Tonce = tonce;
 ```
 
 ```php
+<?php
 $tonce = intval(microtime(true)*1000);
 $privkey = "your private key";
 $pubkey = "your public key";
