@@ -44,53 +44,25 @@ headers.Tonce = tonce;
 
 ```php
 <?php
-$tonce = intval(microtime(true)*1000);
 $privkey = "your private key";
 $pubkey = "your public key";
+
+// @note SET THIS DATA CORRECTLY ON EACH REQUEST AND BEFORE SIG AND AUTH GENERATION
 $data = "empty string or json string";
+$tonce = intval(microtime(true)*1000);
+
 $sig = base64_encode(hash_hmac("sha512", $tonce.$pubkey.$data, $privkey, true));
 $auth = base64_encode($pubkey.":".$sig);
-
-
-$url = "https://magnr.com/api/v1/<some end point>/";
-$curl = curl_init();
-curl_setopt($curl, CURLOPT_URL, $url);
-// apply headers
-curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
-
-// define how we want our response.
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
-curl_setopt($curl, CURLOPT_HEADER, 0); // don't include headers in the response from curl_exec
-
-// optionally, set the POST data if this is a POST request
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-
-// follow redirects just in case
-curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-
-// set timeouts in seconds
-curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
-curl_setopt($curl, CURLOPT_TIMEOUT, 10);
-
-// gimme gimme!
-$body = curl_exec($curl);
-$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-if($status >= 200 && $status < 300){
-    // ... handle error like stuff if we care
-}
-
-echo "STATUS: $status\nBODY:\n$body";
 ```
 
 ```shell
 # With shell, you can pass a signed header with each request
 TONCE=$(($(date +%s)*1000))
-PRIVKEY="your private key here"
-PUBKEY="your public key here"
+PRIVKEY=`echo -e "your private key here"`
+PUBKEY=`echo -e "your public key here"`
 DATA="some json or empty string"
-SIG=`echo -n "$TONCE$PUBKEY$DATA" | openssl dgst -sha512 -hmac "$PRIVKEY" -binary | base64`
-AUTH=`echo -n "$PUBKEY:$SIG" | base64`
+SIG=`echo -en "$TONCE$PUBKEY$DATA" | openssl dgst -sha512 -hmac "$PRIVKEY" -binary | base64`
+AUTH=`echo -en "$PUBKEY:$SIG" | base64`
 curl "https://magnr.com/api/v1/<some end point>/"
   -H "Content-Type: application/json"
   -H "Authorization: Basic $AUTH"
@@ -104,18 +76,16 @@ Every request should include the following header values
 
 Header | Required | Description
 --------- | ------- | -----------
-Tonce | yes | It should be a non-repeating number, and be around a 5 minutes window around the current timestamp.
+Tonce | yes | It should be a non-repeating number, and be around a 5 minutes window around the current timestamp. THIS TONCE NEEDS TO BE MILLISECONDS
 Authorization | yes | The string "Basic ", appended with the signature resulting of calculating the HMAC SHA-512 value of the tonce, the public key that you were assigned, and the body of the request.
 
-
-
-<aside class="notice">
-Notice...
+<aside class="warning">
+TONCE needs to be in milliseconds
 </aside>
 
 # Trading
 
-## Place trade
+## Create Trade
 
 ```shell
 DATA="{\"leverage\":10, \"side\":\"BUY\", \"exchange\":\"Bitfinex\", \"pair\":\"BTCUSD\", \"margin\":5, \"size\":0.2, \"take\":10}"
@@ -128,7 +98,7 @@ curl "https://magnr.com/api/v1/trades/" \
   -d $DATA
 ```
 
-Returns 201 CREATED when the trade is correctly placed. Otherwise, please see error list.
+Returns 201 CREATED when the trade is correctly placed. See error list for other response codes.
 
 > Response - 201 CREATED
 
@@ -171,21 +141,103 @@ Response | Description
 -------- | -----------
 400 Bad Request | The request parameters were missing or incorrect
 409 Conflict | The request could be completed due to a state conflict with the account
-500 Internal Server Error | The system encountered an error, or the exchange failed to accept the trade 
+500 Internal Server Error | The system encountered an error, or the exchange failed to accept the trade
+ 
+## List Trades
 
-## Get trade
+```shell
+curl "https://magnr.com/api/v1/trades/"
+  -H "Content-Type: application/json"
+  -H "Accept: application/json"
+  -H "Authorization: Basic $AUTH"
+  -H "Tonce: <tonce>"
+```
+
+```php
+<?php
+
+$data = "";
+
+/**
+ * DO AUTH STUFF HERE TO SET $auth AND $tonce
+ */
+
+$curl = curl_init("https://magnr.com/api/v1/trades/");
+// apply headers
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
+
+// define how we want our response.
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
+curl_setopt($curl, CURLOPT_HEADER, 0); // don't include headers in the response from curl_exec
+
+// gimme gimme!
+$body = curl_exec($curl);
+$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+echo "STATUS: $status\nBODY:\n$body";
+```
+
+> Response - 200 OK
+
+```json
+{
+  "trades": [
+    ... list of trades
+  ]
+}
+```
+
+### HTTP Request
+
+`GET https://magnr.com/api/v1/trades/`
+
+### URL Parameters
+
+`NONE`
+
+
+
+## Get Trade
 
 ```shell
 curl "https://magnr.com/api/v1/trades/<IDENTIFIER>/"
+  -H "Content-Type: application/json"
+  -H "Accept: application/json"
   -H "Authorization: Basic $AUTH"
   -H "Tonce: <tonce>"
+```
+
+```php
+<?php
+
+$id = <some id returned from /trades/ call>
+$data = "";
+
+/**
+ * DO AUTH STUFF HERE TO SET $auth AND $tonce
+ */
+
+$curl = curl_init("https://magnr.com/api/v1/trades/$id/");
+// apply headers
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
+
+// define how we want our response.
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
+curl_setopt($curl, CURLOPT_HEADER, 0); // don't include headers in the response from curl_exec
+
+// gimme gimme!
+$body = curl_exec($curl);
+$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+echo "STATUS: $status\nBODY:\n$body";
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2
+  "id": 2,
+  "more fields here"...
 }
 ```
 
