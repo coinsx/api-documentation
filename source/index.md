@@ -76,6 +76,8 @@ curl "https://magnr.com/api/v1/<some end point>/"
   -H "Authorization: Basic $AUTH"
   -H "Tonce: $TONCE"
   -d $DATA
+  
+Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
 ```
 
 We use pairs of long-lived application keys to authenticate requests. Please contact <support@magnr.com> to request an API key .
@@ -87,8 +89,8 @@ Header | Required | Description
 Tonce | yes | It should be a non-repeating number, and be around a 5 minutes window around the current timestamp. THIS TONCE NEEDS TO BE MILLISECONDS
 Authorization | yes | The string "Basic ", appended with the signature resulting of calculating the HMAC SHA-512 value of the tonce, the public key that you were assigned, and the body of the request.
 
-<aside class="warning">
-TONCE needs to be in milliseconds
+<aside class="notice">
+TONCE NEEDS TO BE IN MILLISECONDS
 </aside>
 
 # Trading
