@@ -21,6 +21,13 @@ This documentation is in pre-alpha state.
 
 ## Error Handling
 
+> Example JSON Error
+```json
+{
+  errors: ["some error string", "another error string"]
+}
+```
+
 All errors follow general REST principles. Included in the body of any error response (e.g. non-2xx status code) will be an error object of the form:
 
 Parameter | Value
