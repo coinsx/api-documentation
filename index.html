@@ -176,6 +176,32 @@ curl <span class="s2">"https://magnr.com/api/v1/trades/"</span> <span class="se"
 <blockquote>
 <p>Response - 201 CREATED</p>
 </blockquote>
+<pre class="highlight php"><code>
+$data = json_encode(["leverage"=&gt;10, "side"=&gt;"buy", "exchange"=&gt;"Bitfinex", "pair"=&gt;"BTCUSD", "margin"=&gt;5, "size"=&gt;0.2, "take"=&gt;10]);
+
+/**
+ * DO AUTH STUFF HERE TO GENERATE $auth AND $tonce
+ */
+
+$curl = curl_init("https://magnr.com/api/v1/trades/$id/");
+// Set to a POST request
+curl_setopt($curl, CURLOPT_POST, true);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+// apply headers
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce", "Content-Type: application/json", "Accept: application/json"]);
+
+// define how we want our response.
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
+curl_setopt($curl, CURLOPT_HEADER, 0); // don't include headers in the response from curl_exec
+
+// gimme gimme!
+$body = curl_exec($curl);
+$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+$json = json_decode($body,true); // the json as an array
+echo "STATUS: $status\nBODY:\n$body";
+</code></pre>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"&lt;some identifier&gt;"</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -382,8 +408,8 @@ Has to be authenticated
 </blockquote>
 <pre class="highlight json"><code><span class="p">{</span><span class="w">
   </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"more fields here"</span><span class="err">...</span><span class="w">
-</span><span class="err">}</span><span class="w">
+  </span><span class="nt">"more fields here"</span><span class="p">:</span><span class="s2">""</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint retrieves a specific trade.</p>
