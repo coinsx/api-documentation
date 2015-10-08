@@ -21,12 +21,33 @@ This documentation is in pre-alpha state.
 
 ## Environments
 
-Magnr provides two API environments. 
+Magnr provides 2 separate environments for development and production. 
+API pub/priv keys differ between the 2 environments so you will have to request one set from each environment separately.
 
-1. A production environent at https://magnr.com/api/v1/
-2. A sandbox environment at https://sandbox.magnr.com/api/v1/
 
-Tokens between the 2 environments differ so you will have to request one token from each environment separately.
+All responses are of content type `application/json`
+
+### PRODUCTION ENVIRONMENT
+
+The Magnr production environment API is live and used by our own website [https://magnr.com] .
+
+- Production Site: [https://magnr.com/]
+- Production API : [https://magnr.com/api/v1/]
+
+### TEST ENVIRONMENT
+
+All the examples of code in this documentation use the sandbox API in URLs. It is recommended that attempts to use the API are performed against sandbox before live.
+
+- Sandbox Site: [https://sandbox.magnr.com/]
+- Sandbox API : [https://sandbox.magnr.com/api/v1/]
+
+The sandbox environment is connected to bitcoins testnet, consequently you can fund your account from one of many testnet faucets
+
+- [http://faucet.haskoin.com/]
+- [http://tpfaucet.appspot.com/]
+- [https://testnet.coinfaucet.eu/en/]
+- [https://accounts.blockcypher.com/testnet-faucet]
+
 
 <aside class="notice">
 In the SANDBOX environment it is advisable to utilise the "LOCAL" exchange and "BTCUSD" currency pair instead of the known production exchanges/pairs.
@@ -50,8 +71,6 @@ errors | List of error strings
 
 # Authentication
 
-
-> Example of authentication
 
 ```javascript
 // transform all request to include basic auth.
