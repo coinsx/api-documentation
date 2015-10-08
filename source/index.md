@@ -119,7 +119,7 @@ Every request should include the following header values
 
 Header | Required | Description
 --------- | ------- | -----------
-Tonce | yes | It should be a non-repeating number, and be around a 5 minutes window around the current timestamp. THIS TONCE NEEDS TO BE MILLISECONDS
+Tonce | yes | It should be a non-repeating number, and be around a 5 minutes window around the current timestamp. THIS TONCE NEEDS TO BE IN MILLISECONDS
 Authorization | yes | The string "Basic ", appended with the signature resulting of calculating the HMAC SHA-512 value of the tonce, the public key that you were assigned, and the body of the request.
 
 <aside class="notice">
@@ -157,7 +157,7 @@ curl_setopt($curl, CURLOPT_POST, true);
 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 
 // apply headers
-curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce", "Content-Type: application/json", "Accept: application/json"]);
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: Basic $auth", "Tonce: $tonce", "Content-Type: application/json", "Accept: application/json"]);
 
 // define how we want our response.
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
@@ -231,7 +231,7 @@ $data = "";
 
 $curl = curl_init("https://sandbox.magnr.com/api/v1/trades/");
 // apply headers
-curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: Basic $auth", "Tonce: $tonce"]);
 
 // define how we want our response.
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
@@ -319,7 +319,7 @@ $data = "";
 
 $curl = curl_init("https://sandbox.magnr.com/api/v1/trades/$id/");
 // apply headers
-curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: BASIC $auth", "Tonce: $tonce"]);
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: Basic $auth", "Tonce: $tonce"]);
 
 // define how we want our response.
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // curl_exec returns the result
@@ -403,3 +403,74 @@ Response | Description
 404 Not Found | The trade you requested does not exist
 500 Internal Server Error | The system encountered an error
 
+
+## Liquidate (Close) Trade
+
+```shell
+ID=1234
+// regenerate TONCE and AUTH
+curl "https://sandbox.magnr.com/api/v1/trades/$ID/"
+  -H "Content-Type: application/json"
+  -H "Accept: application/json"
+  -H "Authorization: Basic $AUTH"
+  -H "Tonce: $TONCE"
+```
+
+```php
+<?php
+$id = 1234;
+$data = "";
+
+/**
+ * DO AUTH STUFF HERE TO SET $auth AND $tonce
+ */
+
+$curl = curl_init("https://sandbox.magnr.com/api/v1/trades/$id/");
+
+// DELETE REQUEST TYPE
+curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+
+// apply headers
+curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: Basic $auth", "Tonce: $tonce"]);
+
+// define how we want our response.
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($curl, CURLOPT_HEADER, 0);
+
+// gimme gimme!
+$body = curl_exec($curl);
+$status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+echo "STATUS: $status\nBODY:\n$body";
+```
+
+> Example Response - 200 OK
+
+```json
+{
+  "id":1234
+}
+```
+
+### HTTP REQUEST
+
+`DELETE /api/v1/trades/:id/`
+
+### URL PARAMETERS
+
+Parameter | Type | Required | Description
+--------- | ----------- |----- | ------
+id        | string | yes | The ID of the trade to liquidate/close
+
+### RESPONSE
+
+Returns a identity object indicating the ID of the liquidated position.
+
+### ERRORS
+
+Response | Description
+-------- | -----------
+404 Not Found | The trade you requested to delete does not exist.
+409 Conflict  | The trade is in an invalid state (possibly still pending)
+500 Internal Server Error | The system encountered an error
+504 Gateway Timeout | The exchange encountered an issue and could not complete the request.
