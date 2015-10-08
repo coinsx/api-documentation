@@ -29,21 +29,21 @@ All responses are of content type `application/json`
 
 ### PRODUCTION ENVIRONMENT
 
-The Magnr production environment API is live and used by our own website [https://magnr.com] .
+The Magnr production environment API is live and used by our own website [https://magnr.com]() .
 
-- Production Site: [https://magnr.com/]
-- Production API : [https://magnr.com/api/v1/]
+- Production Site: [https://magnr.com/]()
+- Production API : [https://magnr.com/api/v1/]()
 
 ### TEST ENVIRONMENT
 
 All the examples of code in this documentation use the sandbox API in URLs. It is recommended that attempts to use the API are performed against sandbox before live.
 
-- Sandbox Site: [https://sandbox.magnr.com/]
-- Sandbox API : [https://sandbox.magnr.com/api/v1/]
+- Sandbox Site: [https://sandbox.magnr.com/]()
+- Sandbox API : [https://sandbox.magnr.com/api/v1/]()
 
 The sandbox environment is connected to bitcoins testnet, consequently you can fund your account from one of many testnet faucets
 
-- [http://faucet.haskoin.com/](faucet.haskoin.com)
+- [http://faucet.haskoin.com/]()
 - [http://tpfaucet.appspot.com/]()
 - [https://testnet.coinfaucet.eu/en/]()
 - [https://accounts.blockcypher.com/testnet-faucet]()
