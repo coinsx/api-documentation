@@ -54,14 +54,37 @@
 
 <h2 id="environments">Environments</h2>
 
-<p>Magnr provides two API environments. </p>
+<p>Magnr provides 2 separate environments for development and production. 
+API pub/priv keys differ between the 2 environments so you will have to request one set from each environment separately.</p>
 
-<ol>
-<li>A production environent at https://magnr.com/api/v1/</li>
-<li>A sandbox environment at https://sandbox.magnr.com/api/v1/</li>
-</ol>
+<p>All responses are of content type <code class="prettyprint">application/json</code></p>
 
-<p>Tokens between the 2 environments differ so you will have to request one token from each environment separately.</p>
+<h3 id="production-environment">PRODUCTION ENVIRONMENT</h3>
+
+<p>The Magnr production environment API is live and used by our own website [https://magnr.com] .</p>
+
+<ul>
+<li>Production Site: [https://magnr.com/]</li>
+<li>Production API : [https://magnr.com/api/v1/]</li>
+</ul>
+
+<h3 id="test-environment">TEST ENVIRONMENT</h3>
+
+<p>All the examples of code in this documentation use the sandbox API in URLs. It is recommended that attempts to use the API are performed against sandbox before live.</p>
+
+<ul>
+<li>Sandbox Site: [https://sandbox.magnr.com/]</li>
+<li>Sandbox API : [https://sandbox.magnr.com/api/v1/]</li>
+</ul>
+
+<p>The sandbox environment is connected to bitcoins testnet, consequently you can fund your account from one of many testnet faucets</p>
+
+<ul>
+<li>[http://faucet.haskoin.com/]</li>
+<li>[http://tpfaucet.appspot.com/]</li>
+<li>[https://testnet.coinfaucet.eu/en/]</li>
+<li>[https://accounts.blockcypher.com/testnet-faucet]</li>
+</ul>
 
 <aside class="notice">
 In the SANDBOX environment it is advisable to utilise the &ldquo;LOCAL&rdquo; exchange and &ldquo;BTCUSD&rdquo; currency pair instead of the known production exchanges/pairs.
@@ -92,10 +115,6 @@ In the SANDBOX environment it is advisable to utilise the &ldquo;LOCAL&rdquo; ex
 </tbody></table>
 
 <h1 id="authentication">Authentication</h1>
-
-<blockquote>
-<p>Example of authentication</p>
-</blockquote>
 <pre class="highlight javascript"><code><span class="c1">// transform all request to include basic auth.</span>
 <span class="kd">var</span> <span class="nx">tonce</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">;</span> <span class="c1">// any tonce</span>
 <span class="kd">var</span> <span class="nx">shaObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">jsSHA</span><span class="p">(</span><span class="nx">tonce</span> <span class="o">+</span> <span class="nx">publicKey</span> <span class="o">+</span> <span class="nx">data</span><span class="p">,</span> <span class="s2">"TEXT"</span><span class="p">);</span>
