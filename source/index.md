@@ -428,7 +428,7 @@ $data = "";
 $curl = curl_init("https://sandbox.magnr.com/api/v1/trades/$id/");
 
 // DELETE REQUEST TYPE
-curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
 
 // apply headers
 curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: Basic $auth", "Tonce: $tonce"]);
