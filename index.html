@@ -165,7 +165,7 @@ Note: The rest of the shell examples assume the shell variables TONCE and AUTH a
 <tr>
 <td>Tonce</td>
 <td>yes</td>
-<td>It should be a non-repeating number, and be around a 5 minutes window around the current timestamp. THIS TONCE NEEDS TO BE MILLISECONDS</td>
+<td>It should be a non-repeating number, and be around a 5 minutes window around the current timestamp. THIS TONCE NEEDS TO BE IN MILLISECONDS</td>
 </tr>
 <tr>
 <td>Authorization</td>
@@ -205,7 +205,7 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 <span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_POSTFIELDS</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
 
 <span class="c1">// apply headers
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Content-Type: application/json"</span><span class="p">,</span> <span class="s2">"Accept: application/json"</span><span class="p">]);</span>
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: Basic </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Content-Type: application/json"</span><span class="p">,</span> <span class="s2">"Accept: application/json"</span><span class="p">]);</span>
 
 <span class="c1">// define how we want our response.
 </span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// curl_exec returns the result
@@ -355,7 +355,7 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 
 <span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span><span class="p">);</span>
 <span class="c1">// apply headers
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: Basic </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
 
 <span class="c1">// define how we want our response.
 </span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// curl_exec returns the result
@@ -439,7 +439,7 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 
 <span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span class="nv">$id</span><span class="s2">/"</span><span class="p">);</span>
 <span class="c1">// apply headers
-</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: BASIC </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: Basic </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
 
 <span class="c1">// define how we want our response.
 </span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// curl_exec returns the result
@@ -632,6 +632,102 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <tr>
 <td>500 Internal Server Error</td>
 <td>The system encountered an error</td>
+</tr>
+</tbody></table>
+
+<h2 id="liquidate-close-trade">Liquidate (Close) Trade</h2>
+<pre class="highlight shell"><code><span class="nv">ID</span><span class="o">=</span>1234
+// regenerate TONCE and AUTH
+curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span class="nv">$ID</span><span class="s2">/"</span>
+  -H <span class="s2">"Content-Type: application/json"</span>
+  -H <span class="s2">"Accept: application/json"</span>
+  -H <span class="s2">"Authorization: Basic </span><span class="nv">$AUTH</span><span class="s2">"</span>
+  -H <span class="s2">"Tonce: </span><span class="nv">$TONCE</span><span class="s2">"</span>
+</code></pre>
+<pre class="highlight php"><code><span class="cp">&lt;?php</span>
+<span class="nv">$id</span> <span class="o">=</span> <span class="mi">1234</span><span class="p">;</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+
+<span class="sd">/**
+ * DO AUTH STUFF HERE TO SET $auth AND $tonce
+ */</span>
+
+<span class="nv">$curl</span> <span class="o">=</span> <span class="nb">curl_init</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span class="nv">$id</span><span class="s2">/"</span><span class="p">);</span>
+
+<span class="c1">// DELETE REQUEST TYPE
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_CUSTOMREQUEST</span><span class="p">,</span> <span class="s2">"DELETE"</span><span class="p">);</span>
+
+<span class="c1">// apply headers
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HTTPHEADER</span><span class="p">,</span> <span class="p">[</span><span class="s2">"Authorization: Basic </span><span class="nv">$auth</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"Tonce: </span><span class="nv">$tonce</span><span class="s2">"</span><span class="p">]);</span>
+
+<span class="c1">// define how we want our response.
+</span><span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="nb">curl_setopt</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLOPT_HEADER</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+<span class="c1">// gimme gimme!
+</span><span class="nv">$body</span> <span class="o">=</span> <span class="nb">curl_exec</span><span class="p">(</span><span class="nv">$curl</span><span class="p">);</span>
+<span class="nv">$status</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
+</code></pre>
+
+<blockquote>
+<p>Example Response - 200 OK</p>
+</blockquote>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"id"</span><span class="p">:</span><span class="mi">1234</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h3 id="http-request">HTTP REQUEST</h3>
+
+<p><code class="prettyprint">DELETE /api/v1/trades/:id/</code></p>
+
+<h3 id="url-parameters">URL PARAMETERS</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>yes</td>
+<td>The ID of the trade to liquidate/close</td>
+</tr>
+</tbody></table>
+
+<h3 id="response">RESPONSE</h3>
+
+<p>Returns a identity object indicating the ID of the liquidated position.</p>
+
+<h3 id="errors">ERRORS</h3>
+
+<table><thead>
+<tr>
+<th>Response</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>404 Not Found</td>
+<td>The trade you requested to delete does not exist.</td>
+</tr>
+<tr>
+<td>409 Conflict</td>
+<td>The trade is in an invalid state (possibly still pending)</td>
+</tr>
+<tr>
+<td>500 Internal Server Error</td>
+<td>The system encountered an error</td>
+</tr>
+<tr>
+<td>504 Gateway Timeout</td>
+<td>The exchange encountered an issue and could not complete the request.</td>
 </tr>
 </tbody></table>
 
