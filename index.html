@@ -468,6 +468,8 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
     </span><span class="nt">"open_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">234.45</span><span class="p">,</span><span class="w">
     </span><span class="nt">"close_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">235.56</span><span class="p">,</span><span class="w">
     </span><span class="nt">"closed_reason"</span><span class="p">:</span><span class="s2">"user"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"trade_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.48</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"daily_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w">
     </span><span class="nt">"trades_fees"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.004</span><span class="p">,</span><span class="w">
     </span><span class="nt">"daily_fees"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00</span><span class="p">,</span><span class="w">
     </span><span class="nt">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"settled"</span><span class="p">,</span><span class="w">
@@ -567,6 +569,16 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <td>the reason the trade closed (user,stop,limit,insufficient funds)</td>
 </tr>
 <tr>
+<td>trade_rate</td>
+<td>float</td>
+<td>trade charge PERCENTAGE (e.g. 0.48%)</td>
+</tr>
+<tr>
+<td>daily_rate</td>
+<td>float</td>
+<td>daily charge PERCENTAGE (e.g. 0.2%)</td>
+</tr>
+<tr>
 <td>trade_fees</td>
 <td>float</td>
 <td>bitcoin charge applied to the trade (this includes BOTH open AND close fees)</td>
@@ -574,12 +586,12 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <tr>
 <td>daily_fees</td>
 <td>float</td>
-<td>bitcoin charge applied to the trade on a 24 hour basis</td>
+<td>bitcoin charge applied to the trade on a 24 hour basis (multiply by days open to know current charge)pending</td>
 </tr>
 <tr>
 <td>status</td>
 <td>string</td>
-<td>the state of the trade (pending -&gt; open -&gt; closed -&gt; settled)</td>
+<td>the state of the trade (<strong>pending</strong> -&gt; <strong>open</strong> -&gt; <strong>closed</strong> -&gt; <strong>settled</strong>)</td>
 </tr>
 <tr>
 <td>profit</td>
@@ -600,16 +612,6 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <td>sellLimit</td>
 <td>float</td>
 <td>size in currency (e.g. USD) of the sell limit, otherwise NULL if not set</td>
-</tr>
-<tr>
-<td>tradeRate</td>
-<td>float</td>
-<td>trade charge PERCENTAGE (e.g. 0.48%)</td>
-</tr>
-<tr>
-<td>dailyRate</td>
-<td>float</td>
-<td>daily charge PERCENTAGE (e.g. 0.2%)</td>
 </tr>
 </tbody></table>
 
