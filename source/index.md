@@ -348,6 +348,8 @@ echo "STATUS: $status\nBODY:\n$body";
     "open_price": 234.45,
     "close_price": 235.56,
     "closed_reason":"user",
+    "trade_rate": 0.48,
+    "daily_rate": 0.2,
     "trades_fees": 0.004,
     "daily_fees": 0.00,
     "status": "settled",
@@ -385,15 +387,15 @@ closed_at     | int    | timestamp of the trade close (in seconds since epoch)
 open_price    | float  | price the trade was opened at
 close_price   | float  | price the trade closed at
 closed_reason | string | the reason the trade closed (user,stop,limit,insufficient funds)
+trade_rate    | float  | trade charge PERCENTAGE (e.g. 0.48%)
+daily_rate    | float  | daily charge PERCENTAGE (e.g. 0.2%)
 trade_fees    | float  | bitcoin charge applied to the trade (this includes BOTH open AND close fees)
-daily_fees    | float  | bitcoin charge applied to the trade on a 24 hour basis
-status  | string | the state of the trade (pending -> open -> closed -> settled)
+daily_fees    | float  | bitcoin charge applied to the trade on a 24 hour basis (multiply by days open to know current charge)pending
+status  | string | the state of the trade (**pending** -> **open** -> **closed** -> **settled**)
 profit  | float  | the profit on the trade if it has settled, otherwise NULL
 stopMargin  | float  | size in currency (e.g. USD) of the stop margin
 trailMargin | float  | size in currency (e.g. USD) of the trailing stop, otherwise NULL if not set
 sellLimit   | float  | size in currency (e.g. USD) of the sell limit, otherwise NULL if not set
-tradeRate   | float  | trade charge PERCENTAGE (e.g. 0.48%)
-dailyRate   | float  | daily charge PERCENTAGE (e.g. 0.2%)
 
 ### ERRORS
 
