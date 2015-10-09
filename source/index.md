@@ -256,18 +256,20 @@ echo "STATUS: $status\nBODY:\n$body";
         "size": 0.2,
         "deposit": 0.002,
         "exchange":"LOCAL",
-        "created_at":1444230624,
-        "closed_at":1444612316,
-        "open_price": 234.45,
-        "close_price": 235.56,
-        "closed_reason":"user",
+        "created_at":1444251389,
+        "closed_at": null,
+        "open_price": null,
+        "close_price": null,
+        "closed_reason":null,
+        "trade_rate": 0.48,
+        "daily_rate": 0.2,
         "trades_fees": 0.004,
         "daily_fees": 0.00,
-        "status": "settled",
-        "profit": 0.00019382
+        "status": "pending",
+        "profit": null
     },
     {
-        "id"  : 1235,
+        "id"  : 1233,
         "side": "sell",
         "leverage": 5,
         "size": 0.3,
@@ -278,6 +280,8 @@ echo "STATUS: $status\nBODY:\n$body";
         "open_price": 234.45,
         "close_price": 235.56,
         "closed_reason":"stop",
+        "trade_rate": 0.48,
+        "daily_rate": 0.2,
         "trades_fees": 0.002,
         "daily_fees": 0.0009,
         "status": "settled",
@@ -389,13 +393,30 @@ close_price   | float  | price the trade closed at
 closed_reason | string | the reason the trade closed (user,stop,limit,insufficient funds)
 trade_rate    | float  | trade charge PERCENTAGE (e.g. 0.48%)
 daily_rate    | float  | daily charge PERCENTAGE (e.g. 0.2%)
-trade_fees    | float  | bitcoin charge applied to the trade (this includes BOTH open AND close fees)
-daily_fees    | float  | bitcoin charge applied to the trade on a 24 hour basis (multiply by days open to know current charge)pending
-status  | string | the state of the trade (**pending** -> **open** -> **closed** -> **settled**)
+trade_fees    | float  | bitcoin trade fees (absolute) applied to the trade (note: this includes BOTH open AND close fees)
+daily_fees    | float  | bitcoin daily fees (absolute) applied to the trade since it was opened
+status  | string | the state of the trade (**pending** -> **open** -> **closed** -> **settled**), see status info.
 profit  | float  | the profit on the trade if it has settled, otherwise NULL
 stopMargin  | float  | size in currency (e.g. USD) of the stop margin
 trailMargin | float  | size in currency (e.g. USD) of the trailing stop, otherwise NULL if not set
 sellLimit   | float  | size in currency (e.g. USD) of the sell limit, otherwise NULL if not set
+
+### STATUS
+Field | Description
+----- | -----------
+pending | The trade has been placed at the exchange but is awaiting fill (i.e. open price is NULL).
+open    | The trade has been filled and now has an open price
+closed  | The trade has been closed either by user or system but it awaiting a closing price (i.e. close price is NULL).
+settled | The trade has been filled at a close price and now has a profit, all deposits should have been refunded.
+
+### CLOSED REASON
+Field | Description
+----- | -----------
+user  | You (the user) have requested the trade be closed.
+stop  | The trade has reached the stop margin specified, and it has been automatically closed.
+trail | The trade has reached the trail margin specified, and it has been automatically closed.
+limit | The trade has reached the target sell limit, and has been automatically closed.
+insufficient funds | A healthly balance was NOT maintained and a daily charge would not be applied, as a result the trade has been automatically closed.
 
 ### ERRORS
 
