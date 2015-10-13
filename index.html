@@ -235,18 +235,18 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 </tr>
 </thead><tbody>
 <tr>
-<td>leverage</td>
-<td>number</td>
-<td>YES</td>
-<td>none</td>
-<td>10,5,2 (Leverage to apply on this trade)</td>
-</tr>
-<tr>
 <td>side</td>
 <td>string</td>
 <td>YES</td>
 <td>none</td>
 <td>buy or sell (case sensitive)</td>
+</tr>
+<tr>
+<td>size</td>
+<td>float</td>
+<td>YES</td>
+<td>none</td>
+<td>Size of the position to market.</td>
 </tr>
 <tr>
 <td>exchange</td>
@@ -263,18 +263,18 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 <td>BTCUSD, XBTUSD (exchange dependent)</td>
 </tr>
 <tr>
-<td>margin</td>
-<td>float</td>
-<td>YES</td>
-<td>none</td>
-<td>An amount in $USD the price can move against you before being automatically closed out.</td>
+<td>leverage</td>
+<td>number</td>
+<td>NO</td>
+<td>10</td>
+<td>10,5,2 (Leverage to apply on this trade)</td>
 </tr>
 <tr>
-<td>size</td>
+<td>margin</td>
 <td>float</td>
-<td>YES</td>
-<td>none</td>
-<td>Size of the position to market.</td>
+<td>NO</td>
+<td>max stop for deposit</td>
+<td>An amount in $USD the price can move against you before being automatically closed out.</td>
 </tr>
 <tr>
 <td>type</td>
