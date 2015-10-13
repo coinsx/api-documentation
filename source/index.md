@@ -179,12 +179,12 @@ echo "STATUS: $status\nBODY:\n$body";
 
 Parameter | Type | Required | Default | Description
 --------- | ---- | ------- | ----------- | ----------------
-leverage | number | YES | none | 10,5,2 (Leverage to apply on this trade)
 side | string | YES | none | buy or sell (case sensitive)
+size | float | YES | none | Size of the position to market.
 exchange | string | YES | none | Bitstamp,ItBit,Bitfinex (Exchange to be used for the trade)
 pair | string | YES | none | BTCUSD, XBTUSD (exchange dependent)
-margin | float | YES | none | An amount in $USD the price can move against you before being automatically closed out. 
-size | float | YES | none | Size of the position to market.
+leverage | number | NO | 10 | 10,5,2 (Leverage to apply on this trade)
+margin | float | NO | max stop for deposit | An amount in $USD the price can move against you before being automatically closed out. 
 type | string | NO | market | market is the only option at present
 take |float | NO | none | The amount in $USD you wish the price to move in your favour before closing out.
 
