@@ -181,7 +181,7 @@ TONCE NEEDS TO BE IN MILLISECONDS
 <h1 id="trading">Trading</h1>
 
 <h2 id="create-trade">Create Trade</h2>
-<pre class="highlight shell"><code><span class="nv">DATA</span><span class="o">=</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">leverage</span><span class="se">\"</span><span class="s2">:10, </span><span class="se">\"</span><span class="s2">side</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BUY</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">exchange</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bitfinex</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">pair</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BTCUSD</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">margin</span><span class="se">\"</span><span class="s2">:5, </span><span class="se">\"</span><span class="s2">size</span><span class="se">\"</span><span class="s2">:0.2, </span><span class="se">\"</span><span class="s2">take</span><span class="se">\"</span><span class="s2">:10}"</span>
+<pre class="highlight shell"><code><span class="nv">DATA</span><span class="o">=</span><span class="s2">"{</span><span class="se">\"</span><span class="s2">leverage</span><span class="se">\"</span><span class="s2">:10, </span><span class="se">\"</span><span class="s2">side</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BUY</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">exchange</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">Bitfinex</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">pair</span><span class="se">\"</span><span class="s2">:</span><span class="se">\"</span><span class="s2">BTCUSD</span><span class="se">\"</span><span class="s2">, </span><span class="se">\"</span><span class="s2">stop_margin</span><span class="se">\"</span><span class="s2">:5, </span><span class="se">\"</span><span class="s2">size</span><span class="se">\"</span><span class="s2">:0.2, </span><span class="se">\"</span><span class="s2">take</span><span class="se">\"</span><span class="s2">:10}"</span>
 curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span class="se">\</span>
   -X POST <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
@@ -193,7 +193,7 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 
 <p>Returns 201 CREATED when the trade is correctly placed. See error list for other response codes.</p>
 <pre class="highlight php"><code><span class="cp">&lt;?php</span>
-<span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">([</span><span class="s2">"leverage"</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"side"</span><span class="o">=&gt;</span><span class="s2">"buy"</span><span class="p">,</span> <span class="s2">"exchange"</span><span class="o">=&gt;</span><span class="s2">"Bitfinex"</span><span class="p">,</span> <span class="s2">"pair"</span><span class="o">=&gt;</span><span class="s2">"BTCUSD"</span><span class="p">,</span> <span class="s2">"margin"</span><span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="s2">"size"</span><span class="o">=&gt;</span><span class="mf">0.2</span><span class="p">,</span> <span class="s2">"take"</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">]);</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="nb">json_encode</span><span class="p">([</span><span class="s2">"leverage"</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">,</span> <span class="s2">"side"</span><span class="o">=&gt;</span><span class="s2">"buy"</span><span class="p">,</span> <span class="s2">"exchange"</span><span class="o">=&gt;</span><span class="s2">"Bitfinex"</span><span class="p">,</span> <span class="s2">"pair"</span><span class="o">=&gt;</span><span class="s2">"BTCUSD"</span><span class="p">,</span> <span class="s2">"stop_margin"</span><span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="s2">"size"</span><span class="o">=&gt;</span><span class="mf">0.2</span><span class="p">,</span> <span class="s2">"take"</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">]);</span>
 
 <span class="sd">/**
  * DO AUTH STUFF HERE TO GENERATE $auth AND $tonce
@@ -270,7 +270,7 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 <td>10,5,2 (Leverage to apply on this trade)</td>
 </tr>
 <tr>
-<td>margin</td>
+<td>stop_margin</td>
 <td>float</td>
 <td>NO</td>
 <td>max stop for deposit</td>
