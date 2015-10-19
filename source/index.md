@@ -43,10 +43,10 @@ All the examples of code in this documentation use the sandbox API in URLs. It i
 
 The sandbox environment is connected to bitcoins testnet, consequently you can fund your account from one of many testnet faucets
 
-- [http://faucet.haskoin.com/]()
-- [http://tpfaucet.appspot.com/]()
-- [https://testnet.coinfaucet.eu/en/]()
-- [https://accounts.blockcypher.com/testnet-faucet]()
+- [http://faucet.haskoin.com/](http://faucet.haskoin.com/)
+- [http://tpfaucet.appspot.com/](http://tpfaucet.appspot.com/)
+- [https://testnet.coinfaucet.eu/en/](https://testnet.coinfaucet.eu/en/)
+- [https://accounts.blockcypher.com/testnet-faucet](https://accounts.blockcypher.com/testnet-faucet)
 
 
 <aside class="notice">
