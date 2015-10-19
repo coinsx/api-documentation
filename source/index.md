@@ -303,7 +303,7 @@ echo "STATUS: $status\nBODY:\n$body";
 
 Parameter | Type | Description
 --------- | ---- | -----------
-trades    | array| An array of trade objects (see Get Trade call)
+trades    | array| An array of trade objects (see [#get-trade](Get Trade) call)
 
 ## Get Trade
 
