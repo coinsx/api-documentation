@@ -403,9 +403,9 @@ trade_fees    | float  | bitcoin trade fees (absolute) applied to the trade (not
 daily_fees    | float  | bitcoin daily fees (absolute) applied to the trade since it was opened
 status  | string | the state of the trade (**pending** -> **open** -> **closed** -> **settled**), see status info.
 profit  | float  | the profit on the trade if it has settled, otherwise NULL
-stopMargin  | float  | size in currency (e.g. USD) of the stop margin
-trailMargin | float  | size in currency (e.g. USD) of the trailing stop, otherwise NULL if not set
-sellLimit   | float  | size in currency (e.g. USD) of the sell limit, otherwise NULL if not set
+stop_margin  | float  | size in currency (e.g. USD) of the stop margin
+trail_margin | float  | size in currency (e.g. USD) of the trailing stop, otherwise NULL if not set
+sell_limit   | float  | size in currency (e.g. USD) of the sell limit, otherwise NULL if not set
 
 ### STATUS
 Field | Description
