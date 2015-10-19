@@ -131,7 +131,7 @@ TONCE NEEDS TO BE IN MILLISECONDS
 ## Create Trade
 
 ```shell
-DATA="{\"leverage\":10, \"side\":\"BUY\", \"exchange\":\"Bitfinex\", \"pair\":\"BTCUSD\", \"margin\":5, \"size\":0.2, \"take\":10}"
+DATA="{\"leverage\":10, \"side\":\"BUY\", \"exchange\":\"Bitfinex\", \"pair\":\"BTCUSD\", \"stop_margin\":5, \"size\":0.2, \"take\":10}"
 curl "https://sandbox.magnr.com/api/v1/trades/" \
   -X POST \
   -H "Content-Type: application/json" \
@@ -145,7 +145,7 @@ Returns 201 CREATED when the trade is correctly placed. See error list for other
 
 ```php
 <?php
-$data = json_encode(["leverage"=>10, "side"=>"buy", "exchange"=>"Bitfinex", "pair"=>"BTCUSD", "margin"=>5, "size"=>0.2, "take"=>10]);
+$data = json_encode(["leverage"=>10, "side"=>"buy", "exchange"=>"Bitfinex", "pair"=>"BTCUSD", "stop_margin"=>5, "size"=>0.2, "take"=>10]);
 
 /**
  * DO AUTH STUFF HERE TO GENERATE $auth AND $tonce
@@ -184,7 +184,7 @@ size | float | YES | none | Size of the position to market.
 exchange | string | YES | none | Bitstamp,ItBit,Bitfinex (Exchange to be used for the trade)
 pair | string | YES | none | BTCUSD, XBTUSD (exchange dependent)
 leverage | number | NO | 10 | 10,5,2 (Leverage to apply on this trade)
-margin | float | NO | max stop for deposit | An amount in $USD the price can move against you before being automatically closed out. 
+stop_margin | float | NO | max stop for deposit | An amount in $USD the price can move against you before being automatically closed out. 
 type | string | NO | market | market is the only option at present
 take |float | NO | none | The amount in $USD you wish the price to move in your favour before closing out.
 
