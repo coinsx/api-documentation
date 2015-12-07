@@ -6,16 +6,20 @@ language_tabs:
   - php
 
 toc_footers:
-  - <a href='https://sandbox.magnr.com'>Sign Up for a Developer Key</a>
+  - <a href='https://support.magnr.com/hc/en-gb'>Support Desk</a>
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the magnr.com Trading API.
+Welcome to the Magnr Trading API. Technical details on how to implement and connect to our API is provided below.
 
-This documentation is in pre-alpha state.
+For the lowest latency, we recommend using price data direct from the exchanges we connect with. This will allow for better pricing data to be fed directly into your trading scripts. Magnr's position execution policy is at-best market price. Frequent price updates will result in execution prices closer to market prices.
+
+- Bitfinex: [https://api.bitfinex.com/v1/pubticker/BTCUSD]() <a href='http://docs.bitfinex.com/#rest'>Bitfinex Documentation</a>
+- Bitstamp: [https://www.bitstamp.net/api/ticker/]() <a href='https://www.bitstamp.net/api/'>Bitstamp Documentation</a>
+- ItBit: [https://api.itbit.com/v1/markets/XBTUSD/ticker]() <a href='https://api.itbit.com/docs'>ItBit Documentation</a>
 
 ## Environments
 
@@ -100,7 +104,7 @@ curl "https://sandbox.magnr.com/api/v1/<some end point>/" \
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
 ```
 
-We use pairs of long-lived application keys to authenticate requests. Please contact <support@magnr.com> to request an API key .
+We use pairs of long-lived application keys to authenticate requests. To request an API key log in to Magnr, click on Account Settings (In the Account menu drop-down) and select the API tab.
 
 Every request should include the following header values
 
