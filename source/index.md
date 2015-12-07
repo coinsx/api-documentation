@@ -2,8 +2,8 @@
 title: API Reference
 
 language_tabs:
-  - shell
-  - php
+  - shell: cURL
+  - php: PHP
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
@@ -70,17 +70,6 @@ errors | List of error strings
 
 # Authentication
 
-
-```javascript
-// transform all request to include basic auth.
-var tonce = new Date().getTime() * 1000; // any tonce
-var shaObj = new jsSHA(tonce + publicKey + data, "TEXT");
-var hmacSignature = shaObj.getHMAC(privateKey, "TEXT", "SHA-512", "B64");
-
-headers.Authorization = "Basic " + Base64.encode(publicKey + ":" + hmacSignature);
-headers.Tonce = tonce;
-```
-
 ```php
 <?php
 $privkey = "your private key";
@@ -110,34 +99,6 @@ curl "https://sandbox.magnr.com/api/v1/<some end point>/" \
   -d $DATA
   
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
-```
-
-```ruby
-require 'uri'
-require 'net/http'
-require 'time'
-require 'securerandom'
-require 'base64'
-
-uri = URI.parse("https://sandbox.magnr.com")
-http = Net::HTTP.new(uri.host, uri.port)
-http.use_ssl = true
-
-priv_key = "YOUR_PRIVATE_KEY"
-pub_key = "YOUR_PUBLIC_KEY"
-
-tonce = Time.now.to_i * 1000
-
-data = "some json or empty string"
-signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), priv_key, tonce.to_s+pub_key+data))
-auth = Base64.strict_encode64("#{pub_key}:#{signature}")
-
-request = Net::HTTP::Get.new("/api/v1/<some end point>/")
-request.add_field('Content-Type', 'application/json')
-request.add_field('Authorization', "Basic #{auth}")
-request.add_field('Tonce', tonce)
-
-response = http.request(request)
 ```
 
 We use pairs of long-lived application keys to authenticate requests. Please contact <support@magnr.com> to request an API key .
