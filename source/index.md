@@ -3,7 +3,7 @@ title: API Reference
 
 language_tabs:
   - shell: cURL
-  - php: PHP
+  - php
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
