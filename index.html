@@ -48,14 +48,6 @@
 
 <p>Welcome to the Magnr Trading API. Technical details on how to implement and connect to our API is provided below.</p>
 
-<p>For the lowest latency, we recommend using price data direct from the exchanges we connect with. This will allow for better pricing data to be fed directly into your trading scripts. Magnr&rsquo;s position execution policy is at-best market price. Frequent price updates will result in execution prices closer to market prices.</p>
-
-<ul>
-<li>Bitfinex: <a href="#">https://api.bitfinex.com/v1/pubticker/BTCUSD</a> <a href='http://docs.bitfinex.com/#rest'>Bitfinex Documentation</a></li>
-<li>Bitstamp: <a href="#">https://www.bitstamp.net/api/ticker/</a> <a href='https://www.bitstamp.net/api/'>Bitstamp Documentation</a></li>
-<li>ItBit: <a href="#">https://api.itbit.com/v1/markets/XBTUSD/ticker</a> <a href='https://api.itbit.com/docs'>ItBit Documentation</a></li>
-</ul>
-
 <h2 id="environments">Environments</h2>
 
 <p>Magnr provides 2 separate environments for development and production. 
@@ -804,6 +796,36 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <td>The exchange encountered an issue and could not complete the request.</td>
 </tr>
 </tbody></table>
+
+<h1 id="price-data">Price Data</h1>
+
+<h2 id="exchange-pricing">Exchange Pricing</h2>
+
+<p>For the lowest latency, we recommend using price data direct from the exchanges we connect with. This will allow for better pricing data to be fed directly into your trading scripts. Magnr&rsquo;s position execution policy is at-best market price. Frequent price updates will result in execution prices closer to market prices.</p>
+
+<h3 id="bitfinex">Bitfinex</h3>
+
+<ul>
+<li>Bitfinex: <a href="https://api.bitfinex.com/v1/pubticker/BTCUSD">https://api.bitfinex.com/v1/pubticker/BTCUSD</a></li>
+</ul>
+
+<p><a href='http://docs.bitfinex.com/#rest'>Bitfinex Documentation</a></p>
+
+<h3 id="bitstamp">Bitstamp</h3>
+
+<ul>
+<li>Bitstamp: <a href="https://www.bitstamp.net/api/ticker/">https://www.bitstamp.net/api/ticker/</a></li>
+</ul>
+
+<p><a href='https://www.bitstamp.net/api/'>Bitstamp Documentation</a></p>
+
+<h3 id="itbit">ItBit</h3>
+
+<ul>
+<li>ItBit: <a href="https://api.itbit.com/v1/markets/XBTUSD/ticker">https://api.itbit.com/v1/markets/XBTUSD/ticker</a></li>
+</ul>
+
+<p><a href='https://api.itbit.com/docs'>ItBit Documentation</a></p>
 
       </div>
       <div class="dark-box">
