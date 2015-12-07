@@ -38,7 +38,7 @@
       <div id="toc">
       </div>
         <ul class="toc-footer">
-            <li><a href='https://sandbox.magnr.com'>Sign Up for a Developer Key</a></li>
+            <li><a href='https://support.magnr.com/hc/en-gb'>Support Desk</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -46,9 +46,15 @@
       <div class="content">
         <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the magnr.com Trading API.</p>
+<p>Welcome to the Magnr Trading API. Technical details on how to implement and connect to our API is provided below.</p>
 
-<p>This documentation is in pre-alpha state.</p>
+<p>For the lowest latency, we recommend using price data direct from the exchanges we connect with. This will allow for better pricing data to be fed directly into your trading scripts. Magnr&rsquo;s position execution policy is at-best market price. Frequent price updates will result in execution prices closer to market prices.</p>
+
+<ul>
+<li>Bitfinex: <a href="#">https://api.bitfinex.com/v1/pubticker/BTCUSD</a> <a href='http://docs.bitfinex.com/#rest'>Bitfinex Documentation</a></li>
+<li>Bitstamp: <a href="#">https://www.bitstamp.net/api/ticker/</a> <a href='https://www.bitstamp.net/api/'>Bitstamp Documentation</a></li>
+<li>ItBit: <a href="#">https://api.itbit.com/v1/markets/XBTUSD/ticker</a> <a href='https://api.itbit.com/docs'>ItBit Documentation</a></li>
+</ul>
 
 <h2 id="environments">Environments</h2>
 
@@ -141,7 +147,7 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/&lt;some end point&gt;/"
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
 </code></pre>
 
-<p>We use pairs of long-lived application keys to authenticate requests. Please contact <a href="mailto:support@magnr.com">support@magnr.com</a> to request an API key .</p>
+<p>We use pairs of long-lived application keys to authenticate requests. To request an API key log in to Magnr, click on Account Settings (In the Account menu drop-down) and select the API tab.</p>
 
 <p>Every request should include the following header values</p>
 
