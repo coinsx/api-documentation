@@ -3,6 +3,7 @@ title: API Reference
 
 language_tabs:
   - shell: cURL
+  - ruby
   - php
 
 toc_footers:
@@ -98,6 +99,35 @@ curl "https://sandbox.magnr.com/api/v1/<some end point>/" \
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
 ```
 
+```ruby
+require 'uri'
+require 'net/http'
+require 'time'
+require 'securerandom'
+require 'base64'
+
+uri = URI.parse("https://sandbox.magnr.com")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+pubkey = "YOUR PUBLIC KEY"
+privkey = "YOUR PRIVATE KEY"
+
+# milliseconds time
+tonce = Time.now.to_i * 1000
+
+data = ""
+signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), privkey, tonce.to_s+pubkey+data))
+
+request = Net::HTTP::Get.new("/api/v1/<some end point>/")
+request.add_field('Content-Type', 'application/json')
+request.add_field('Tonce', tonce)
+request.basic_auth(pubkey,signature)
+
+response = http.request(request)
+print response.body
+```
+
 We use pairs of long-lived application keys to authenticate requests. To request an API key log in to Magnr, click on Account Settings (In the Account menu drop-down) and select the API tab.
 
 Every request should include the following header values
@@ -154,6 +184,43 @@ $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 $json = json_decode($body,true); // the json as an array
 echo "STATUS: $status\nBODY:\n$body";
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'time'
+require 'securerandom'
+require 'base64'
+require 'json'
+
+uri = URI.parse("https://sandbox.magnr.com")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+#AUTHENTICATION HERE ... (see authentication section)
+
+pubkey = "YOUR PRIVATE KEY"
+privkey = "YOUR PUBLIC KEY"
+
+# milliseconds time
+tonce = Time.now.to_i * 1000
+
+# PLACE AN ORDER!
+data = {:leverage =>10, :side =>"buy", :exchange =>"LOCAL", :pair =>"BTCUSD", :stop_margin =>5, :size =>0.3, :take =>10}.to_json
+signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), privkey, tonce.to_s+pubkey+data))
+
+##### END AUTH
+
+request = Net::HTTP::Post.new("/api/v1/trades/")
+request.add_field('Content-Type', 'application/json')
+request.add_field('Tonce', tonce)
+request.basic_auth(pubkey,signature)
+request.body = data
+
+response = http.request(request)
+json = JSON.parse(response.body)
+print json
 ```
 
 ### HTTP Request
@@ -227,6 +294,41 @@ $body = curl_exec($curl);
 $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 echo "STATUS: $status\nBODY:\n$body";
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'time'
+require 'securerandom'
+require 'base64'
+require 'json'
+
+uri = URI.parse("https://sandbox.magnr.com")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+#AUTHENTICATION HERE ... (see authentication section)
+
+pubkey = "YOUR PRIVATE KEY"
+privkey = "YOUR PUBLIC KEY"
+
+# milliseconds time
+tonce = Time.now.to_i * 1000
+
+data = ""
+signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), privkey, tonce.to_s+pubkey+data))
+
+##### END AUTH
+
+request = Net::HTTP::Get.new("/api/v1/trades/")
+request.add_field('Content-Type', 'application/json')
+request.add_field('Tonce', tonce)
+request.basic_auth(pubkey,signature)
+
+response = http.request(request)
+json = JSON.parse(response.body)
+print json
 ```
 
 > Response - 200 OK
@@ -325,6 +427,41 @@ $body = curl_exec($curl);
 $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
 echo "STATUS: $status\nBODY:\n$body";
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'time'
+require 'securerandom'
+require 'base64'
+require 'json'
+
+uri = URI.parse("https://sandbox.magnr.com")
+http = Net::HTTP.new(uri.host, uri.port)
+http.use_ssl = true
+
+#AUTHENTICATION HERE ... (see authentication section)
+
+pubkey = "YOUR PRIVATE KEY"
+privkey = "YOUR PUBLIC KEY"
+
+# milliseconds time
+tonce = Time.now.to_i * 1000
+
+data = ""
+signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), privkey, tonce.to_s+pubkey+data))
+
+##### END AUTH
+
+request = Net::HTTP::Get.new("/api/v1/trades/#{id}")
+request.add_field('Content-Type', 'application/json')
+request.add_field('Tonce', tonce)
+request.basic_auth(pubkey,signature)
+
+response = http.request(request)
+json = JSON.parse(response.body)
+print json
 ```
 
 > Example response
