@@ -15,12 +15,6 @@ search: true
 
 Welcome to the Magnr Trading API. Technical details on how to implement and connect to our API is provided below.
 
-For the lowest latency, we recommend using price data direct from the exchanges we connect with. This will allow for better pricing data to be fed directly into your trading scripts. Magnr's position execution policy is at-best market price. Frequent price updates will result in execution prices closer to market prices.
-
-- Bitfinex: [https://api.bitfinex.com/v1/pubticker/BTCUSD]() <a href='http://docs.bitfinex.com/#rest'>Bitfinex Documentation</a>
-- Bitstamp: [https://www.bitstamp.net/api/ticker/]() <a href='https://www.bitstamp.net/api/'>Bitstamp Documentation</a>
-- ItBit: [https://api.itbit.com/v1/markets/XBTUSD/ticker]() <a href='https://api.itbit.com/docs'>ItBit Documentation</a>
-
 ## Environments
 
 Magnr provides 2 separate environments for development and production. 
@@ -494,3 +488,27 @@ Response | Description
 409 Conflict  | The trade is in an invalid state (possibly still pending)
 500 Internal Server Error | The system encountered an error
 504 Gateway Timeout | The exchange encountered an issue and could not complete the request.
+
+# Price Data
+
+## Exchange Pricing
+
+For the lowest latency, we recommend using price data direct from the exchanges we connect with. This will allow for better pricing data to be fed directly into your trading scripts. Magnr's position execution policy is at-best market price. Frequent price updates will result in execution prices closer to market prices.
+
+### Bitfinex
+
+- Bitfinex: [https://api.bitfinex.com/v1/pubticker/BTCUSD](https://api.bitfinex.com/v1/pubticker/BTCUSD)
+
+<a href='http://docs.bitfinex.com/#rest'>Bitfinex Documentation</a>
+
+### Bitstamp
+
+- Bitstamp: [https://www.bitstamp.net/api/ticker/](https://www.bitstamp.net/api/ticker/)
+
+<a href='https://www.bitstamp.net/api/'>Bitstamp Documentation</a>
+
+### ItBit
+
+- ItBit: [https://api.itbit.com/v1/markets/XBTUSD/ticker](https://api.itbit.com/v1/markets/XBTUSD/ticker)
+
+<a href='https://api.itbit.com/docs'>ItBit Documentation</a>
