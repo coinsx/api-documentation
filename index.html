@@ -13,7 +13,7 @@
 
       <script>
         $(function() {
-          setupLanguages(["shell","javascript","php"]);
+          setupLanguages(["shell","php"]);
         });
       </script>
   </head>
@@ -29,7 +29,6 @@
       <img src="images/logo.png" />
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="javascript">javascript</a>
               <a href="#" data-language-name="php">php</a>
         </div>
         <div class="search">
@@ -149,6 +148,32 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/&lt;some end point&gt;/"
   -d <span class="nv">$DATA</span>
 
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
+</code></pre>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+<span class="nb">require</span> <span class="s1">'time'</span>
+<span class="nb">require</span> <span class="s1">'securerandom'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
+
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com"</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">priv_key</span> <span class="o">=</span> <span class="s2">"YOUR_PRIVATE_KEY"</span>
+<span class="n">pub_key</span> <span class="o">=</span> <span class="s2">"YOUR_PUBLIC_KEY"</span>
+
+<span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="s2">"some json or empty string"</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">priv_key</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pub_key</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
+<span class="n">auth</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="s2">"</span><span class="si">#{</span><span class="n">pub_key</span><span class="si">}</span><span class="s2">:</span><span class="si">#{</span><span class="n">signature</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/&lt;some end point&gt;/"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Authorization'</span><span class="p">,</span> <span class="s2">"Basic </span><span class="si">#{</span><span class="n">auth</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Tonce'</span><span class="p">,</span> <span class="n">tonce</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 </code></pre>
 
 <p>We use pairs of long-lived application keys to authenticate requests. Please contact <a href="mailto:support@magnr.com">support@magnr.com</a> to request an API key .</p>
@@ -813,7 +838,6 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="javascript">javascript</a>
                 <a href="#" data-language-name="php">php</a>
           </div>
       </div>
