@@ -13,7 +13,7 @@
 
       <script>
         $(function() {
-          setupLanguages(["shell","php"]);
+          setupLanguages(["shell","ruby","php"]);
         });
       </script>
   </head>
@@ -29,6 +29,7 @@
       <img src="images/logo.png" />
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
+              <a href="#" data-language-name="ruby">ruby</a>
               <a href="#" data-language-name="php">php</a>
         </div>
         <div class="search">
@@ -138,6 +139,33 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/&lt;some end point&gt;/"
 
 Note: The rest of the shell examples assume the shell variables TONCE and AUTH are regenerated per request.
 </code></pre>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+<span class="nb">require</span> <span class="s1">'time'</span>
+<span class="nb">require</span> <span class="s1">'securerandom'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
+
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com"</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">pubkey</span> <span class="o">=</span> <span class="s2">"YOUR PUBLIC KEY"</span>
+<span class="n">privkey</span> <span class="o">=</span> <span class="s2">"YOUR PRIVATE KEY"</span>
+
+<span class="c1"># milliseconds time</span>
+<span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">privkey</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pubkey</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/&lt;some end point&gt;/"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Tonce'</span><span class="p">,</span> <span class="n">tonce</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">basic_auth</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span><span class="n">signature</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">response</span><span class="p">.</span><span class="nf">body</span>
+</code></pre>
 
 <p>We use pairs of long-lived application keys to authenticate requests. To request an API key log in to Magnr, click on Account Settings (In the Account menu drop-down) and select the API tab.</p>
 
@@ -205,6 +233,41 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 
 <span class="nv">$json</span> <span class="o">=</span> <span class="nb">json_decode</span><span class="p">(</span><span class="nv">$body</span><span class="p">,</span><span class="kc">true</span><span class="p">);</span> <span class="c1">// the json as an array
 </span><span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
+</code></pre>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+<span class="nb">require</span> <span class="s1">'time'</span>
+<span class="nb">require</span> <span class="s1">'securerandom'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
+<span class="nb">require</span> <span class="s1">'json'</span>
+
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com"</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="c1">#AUTHENTICATION HERE ... (see authentication section)</span>
+
+<span class="n">pubkey</span> <span class="o">=</span> <span class="s2">"YOUR PRIVATE KEY"</span>
+<span class="n">privkey</span> <span class="o">=</span> <span class="s2">"YOUR PUBLIC KEY"</span>
+
+<span class="c1"># milliseconds time</span>
+<span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
+
+<span class="c1"># PLACE AN ORDER!</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:leverage</span> <span class="o">=&gt;</span><span class="mi">10</span><span class="p">,</span> <span class="ss">:side</span> <span class="o">=&gt;</span><span class="s2">"buy"</span><span class="p">,</span> <span class="ss">:exchange</span> <span class="o">=&gt;</span><span class="s2">"LOCAL"</span><span class="p">,</span> <span class="ss">:pair</span> <span class="o">=&gt;</span><span class="s2">"BTCUSD"</span><span class="p">,</span> <span class="ss">:stop_margin</span> <span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="ss">:take</span> <span class="o">=&gt;</span><span class="mi">10</span><span class="p">}.</span><span class="nf">to_json</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">privkey</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pubkey</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
+
+<span class="c1">##### END AUTH</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/trades/"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Tonce'</span><span class="p">,</span> <span class="n">tonce</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">basic_auth</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span><span class="n">signature</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="n">data</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">json</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="nf">body</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">json</span>
 </code></pre>
 
 <h3 id="http-request">HTTP Request</h3>
@@ -355,6 +418,39 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 
 <span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
 </code></pre>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+<span class="nb">require</span> <span class="s1">'time'</span>
+<span class="nb">require</span> <span class="s1">'securerandom'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
+<span class="nb">require</span> <span class="s1">'json'</span>
+
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com"</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="c1">#AUTHENTICATION HERE ... (see authentication section)</span>
+
+<span class="n">pubkey</span> <span class="o">=</span> <span class="s2">"YOUR PRIVATE KEY"</span>
+<span class="n">privkey</span> <span class="o">=</span> <span class="s2">"YOUR PUBLIC KEY"</span>
+
+<span class="c1"># milliseconds time</span>
+<span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">privkey</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pubkey</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
+
+<span class="c1">##### END AUTH</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/trades/"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Tonce'</span><span class="p">,</span> <span class="n">tonce</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">basic_auth</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span><span class="n">signature</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">json</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="nf">body</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">json</span>
+</code></pre>
 
 <blockquote>
 <p>Response - 200 OK</p>
@@ -458,6 +554,39 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <span class="nv">$status</span> <span class="o">=</span> <span class="nb">curl_getinfo</span><span class="p">(</span><span class="nv">$curl</span><span class="p">,</span> <span class="nx">CURLINFO_HTTP_CODE</span><span class="p">);</span>
 
 <span class="k">echo</span> <span class="s2">"STATUS: </span><span class="nv">$status</span><span class="se">\n</span><span class="s2">BODY:</span><span class="se">\n</span><span class="nv">$body</span><span class="s2">"</span><span class="p">;</span>
+</code></pre>
+<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+<span class="nb">require</span> <span class="s1">'time'</span>
+<span class="nb">require</span> <span class="s1">'securerandom'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
+<span class="nb">require</span> <span class="s1">'json'</span>
+
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com"</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="c1">#AUTHENTICATION HERE ... (see authentication section)</span>
+
+<span class="n">pubkey</span> <span class="o">=</span> <span class="s2">"YOUR PRIVATE KEY"</span>
+<span class="n">privkey</span> <span class="o">=</span> <span class="s2">"YOUR PUBLIC KEY"</span>
+
+<span class="c1"># milliseconds time</span>
+<span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">privkey</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pubkey</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
+
+<span class="c1">##### END AUTH</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/trades/</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Tonce'</span><span class="p">,</span> <span class="n">tonce</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">basic_auth</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span><span class="n">signature</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="n">json</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="nf">body</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">json</span>
 </code></pre>
 
 <blockquote>
@@ -831,6 +960,7 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">cURL</a>
+                <a href="#" data-language-name="ruby">ruby</a>
                 <a href="#" data-language-name="php">php</a>
           </div>
       </div>
