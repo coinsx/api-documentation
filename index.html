@@ -245,19 +245,15 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
 
-<span class="c1">#AUTHENTICATION HERE ... (see authentication section)</span>
+<span class="c1">#TRADE DATA</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:leverage</span> <span class="o">=&gt;</span><span class="mi">10</span><span class="p">,</span> <span class="ss">:side</span> <span class="o">=&gt;</span><span class="s2">"buy"</span><span class="p">,</span> <span class="ss">:exchange</span> <span class="o">=&gt;</span><span class="s2">"LOCAL"</span><span class="p">,</span> <span class="ss">:pair</span> <span class="o">=&gt;</span><span class="s2">"BTCUSD"</span><span class="p">,</span> <span class="ss">:stop_margin</span> <span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="ss">:take</span> <span class="o">=&gt;</span><span class="mi">10</span><span class="p">}.</span><span class="nf">to_json</span>
 
+<span class="c1">#BEGIN AUTH (see authentication section)</span>
 <span class="n">pubkey</span> <span class="o">=</span> <span class="s2">"YOUR PRIVATE KEY"</span>
 <span class="n">privkey</span> <span class="o">=</span> <span class="s2">"YOUR PUBLIC KEY"</span>
-
-<span class="c1"># milliseconds time</span>
 <span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
-
-<span class="c1"># PLACE AN ORDER!</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:leverage</span> <span class="o">=&gt;</span><span class="mi">10</span><span class="p">,</span> <span class="ss">:side</span> <span class="o">=&gt;</span><span class="s2">"buy"</span><span class="p">,</span> <span class="ss">:exchange</span> <span class="o">=&gt;</span><span class="s2">"LOCAL"</span><span class="p">,</span> <span class="ss">:pair</span> <span class="o">=&gt;</span><span class="s2">"BTCUSD"</span><span class="p">,</span> <span class="ss">:stop_margin</span> <span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span> <span class="ss">:size</span> <span class="o">=&gt;</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span> <span class="ss">:take</span> <span class="o">=&gt;</span><span class="mi">10</span><span class="p">}.</span><span class="nf">to_json</span>
 <span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">privkey</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pubkey</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
-
-<span class="c1">##### END AUTH</span>
+<span class="c1">#END AUTH</span>
 
 <span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/trades/"</span><span class="p">)</span>
 <span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
@@ -429,18 +425,13 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/"</span> <span cl
 <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
 
-<span class="c1">#AUTHENTICATION HERE ... (see authentication section)</span>
-
+<span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
+<span class="c1">#BEGIN AUTH (see authentication section)</span>
 <span class="n">pubkey</span> <span class="o">=</span> <span class="s2">"YOUR PRIVATE KEY"</span>
 <span class="n">privkey</span> <span class="o">=</span> <span class="s2">"YOUR PUBLIC KEY"</span>
-
-<span class="c1"># milliseconds time</span>
 <span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
 <span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">privkey</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pubkey</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
-
-<span class="c1">##### END AUTH</span>
+<span class="c1">#END AUTH</span>
 
 <span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/trades/"</span><span class="p">)</span>
 <span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
@@ -566,20 +557,19 @@ curl <span class="s2">"https://sandbox.magnr.com/api/v1/trades/</span><span clas
 <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
 
-<span class="c1">#AUTHENTICATION HERE ... (see authentication section)</span>
+<span class="c1">#DATA</span>
+<span class="nb">id</span> <span class="o">=</span> <span class="s2">"TRADE ID"</span>
+<span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
 
+<span class="c1">#BEGIN AUTH (see authentication section)</span>
 <span class="n">pubkey</span> <span class="o">=</span> <span class="s2">"YOUR PRIVATE KEY"</span>
 <span class="n">privkey</span> <span class="o">=</span> <span class="s2">"YOUR PUBLIC KEY"</span>
-
-<span class="c1"># milliseconds time</span>
 <span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
 <span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">privkey</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pubkey</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
+<span class="c1">#END AUTH</span>
 
-<span class="c1">##### END AUTH</span>
-
-<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/trades/</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># BEGIN REQUEST</span>
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/trades/</span><span class="si">#{</span><span class="nb">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">)</span>
 <span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
 <span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Tonce'</span><span class="p">,</span> <span class="n">tonce</span><span class="p">)</span>
 <span class="n">request</span><span class="p">.</span><span class="nf">basic_auth</span><span class="p">(</span><span class="n">pubkey</span><span class="p">,</span><span class="n">signature</span><span class="p">)</span>
