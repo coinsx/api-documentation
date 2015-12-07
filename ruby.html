@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Documentation</title>
+
+    <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      <script src="javascripts/all_nosearch.js" type="text/javascript"></script>
+
+  </head>
+
+  <body class="ruby">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+      <div id="toc">
+      </div>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
+<span class="nb">require</span> <span class="s1">'net/http'</span>
+<span class="nb">require</span> <span class="s1">'time'</span>
+<span class="nb">require</span> <span class="s1">'securerandom'</span>
+<span class="nb">require</span> <span class="s1">'base64'</span>
+
+<span class="n">uri</span> <span class="o">=</span> <span class="no">URI</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="s2">"https://sandbox.magnr.com"</span><span class="p">)</span>
+<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">uri</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">uri</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">priv_key</span> <span class="o">=</span> <span class="s2">"YOUR_PRIVATE_KEY"</span>
+<span class="n">pub_key</span> <span class="o">=</span> <span class="s2">"YOUR_PUBLIC_KEY"</span>
+
+<span class="n">tonce</span> <span class="o">=</span> <span class="no">Time</span><span class="p">.</span><span class="nf">now</span><span class="p">.</span><span class="nf">to_i</span> <span class="o">*</span> <span class="mi">1000</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="s2">"some json or empty string"</span>
+<span class="n">signature</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">HMAC</span><span class="p">.</span><span class="nf">digest</span><span class="p">(</span><span class="no">OpenSSL</span><span class="o">::</span><span class="no">Digest</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'sha512'</span><span class="p">),</span> <span class="n">priv_key</span><span class="p">,</span> <span class="n">tonce</span><span class="p">.</span><span class="nf">to_s</span><span class="o">+</span><span class="n">pub_key</span><span class="o">+</span><span class="n">data</span><span class="p">))</span>
+<span class="n">auth</span> <span class="o">=</span> <span class="no">Base64</span><span class="p">.</span><span class="nf">strict_encode64</span><span class="p">(</span><span class="s2">"</span><span class="si">#{</span><span class="n">pub_key</span><span class="si">}</span><span class="s2">:</span><span class="si">#{</span><span class="n">signature</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"/api/v1/&lt;some end point&gt;/"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Content-Type'</span><span class="p">,</span> <span class="s1">'application/json'</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Authorization'</span><span class="p">,</span> <span class="s2">"Basic </span><span class="si">#{</span><span class="n">auth</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">add_field</span><span class="p">(</span><span class="s1">'Tonce'</span><span class="p">,</span> <span class="n">tonce</span><span class="p">)</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</code></pre>
+
+      </div>
+      <div class="dark-box">
+      </div>
+    </div>
+  </body>
+</html>
