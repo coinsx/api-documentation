@@ -198,19 +198,15 @@ uri = URI.parse("https://sandbox.magnr.com")
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
-#AUTHENTICATION HERE ... (see authentication section)
+#TRADE DATA
+data = {:leverage =>10, :side =>"buy", :exchange =>"LOCAL", :pair =>"BTCUSD", :stop_margin =>5, :size =>0.3, :take =>10}.to_json
 
+#BEGIN AUTH (see authentication section)
 pubkey = "YOUR PRIVATE KEY"
 privkey = "YOUR PUBLIC KEY"
-
-# milliseconds time
 tonce = Time.now.to_i * 1000
-
-# PLACE AN ORDER!
-data = {:leverage =>10, :side =>"buy", :exchange =>"LOCAL", :pair =>"BTCUSD", :stop_margin =>5, :size =>0.3, :take =>10}.to_json
 signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), privkey, tonce.to_s+pubkey+data))
-
-##### END AUTH
+#END AUTH
 
 request = Net::HTTP::Post.new("/api/v1/trades/")
 request.add_field('Content-Type', 'application/json')
@@ -308,18 +304,13 @@ uri = URI.parse("https://sandbox.magnr.com")
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
-#AUTHENTICATION HERE ... (see authentication section)
-
+data = ""
+#BEGIN AUTH (see authentication section)
 pubkey = "YOUR PRIVATE KEY"
 privkey = "YOUR PUBLIC KEY"
-
-# milliseconds time
 tonce = Time.now.to_i * 1000
-
-data = ""
 signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), privkey, tonce.to_s+pubkey+data))
-
-##### END AUTH
+#END AUTH
 
 request = Net::HTTP::Get.new("/api/v1/trades/")
 request.add_field('Content-Type', 'application/json')
@@ -441,20 +432,19 @@ uri = URI.parse("https://sandbox.magnr.com")
 http = Net::HTTP.new(uri.host, uri.port)
 http.use_ssl = true
 
-#AUTHENTICATION HERE ... (see authentication section)
+#DATA
+id = "TRADE ID"
+data = ""
 
+#BEGIN AUTH (see authentication section)
 pubkey = "YOUR PRIVATE KEY"
 privkey = "YOUR PUBLIC KEY"
-
-# milliseconds time
 tonce = Time.now.to_i * 1000
-
-data = ""
 signature = Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha512'), privkey, tonce.to_s+pubkey+data))
+#END AUTH
 
-##### END AUTH
-
-request = Net::HTTP::Get.new("/api/v1/trades/#{id}")
+# BEGIN REQUEST
+request = Net::HTTP::Get.new("/api/v1/trades/#{id}/")
 request.add_field('Content-Type', 'application/json')
 request.add_field('Tonce', tonce)
 request.basic_auth(pubkey,signature)
