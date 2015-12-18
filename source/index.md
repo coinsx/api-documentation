@@ -343,6 +343,9 @@ print json
         "daily_rate": 0.2,
         "trade_fees": 0.004,
         "daily_fees": 0.00,
+        "stop_margin": 20,
+        "trail_margin: 20,
+        "sell_limit": 10,
         "status": "pending",
         "profit": null
     },
@@ -362,6 +365,9 @@ print json
         "daily_rate": 0.2,
         "trade_fees": 0.002,
         "daily_fees": 0.0009,
+        "stop_margin": 20,
+        "trail_margin: 20,
+        "sell_limit": 10,
         "status": "settled",
         "profit": -0.00000667
       }
@@ -474,6 +480,9 @@ print json
     "daily_rate": 0.2,
     "trade_fees": 0.004,
     "daily_fees": 0.00,
+    "stop_margin": 20,
+    "trail_margin: 20,
+    "sell_limit": 10,    
     "status": "settled",
     "profit": 0.00019382
   }
