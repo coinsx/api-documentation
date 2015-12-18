@@ -341,7 +341,7 @@ print json
         "closed_reason":null,
         "trade_rate": 0.48,
         "daily_rate": 0.2,
-        "trades_fees": 0.004,
+        "trade_fees": 0.004,
         "daily_fees": 0.00,
         "status": "pending",
         "profit": null
@@ -360,7 +360,7 @@ print json
         "closed_reason":"stop",
         "trade_rate": 0.48,
         "daily_rate": 0.2,
-        "trades_fees": 0.002,
+        "trade_fees": 0.002,
         "daily_fees": 0.0009,
         "status": "settled",
         "profit": -0.00000667
@@ -472,7 +472,7 @@ print json
     "closed_reason":"user",
     "trade_rate": 0.48,
     "daily_rate": 0.2,
-    "trades_fees": 0.004,
+    "trade_fees": 0.004,
     "daily_fees": 0.00,
     "status": "settled",
     "profit": 0.00019382
